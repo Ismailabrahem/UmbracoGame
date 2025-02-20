@@ -1,0 +1,128 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using UmbracoGame.Models.ViewModels;
+@using UmbracoGame.Models;
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<SearchPageViewModel>
+
+@{
+    Layout = "root.cshtml";
+}
+
+<link href="~/css/search.css" rel="stylesheet" />
+
+@* <component type="typeof(SearchBlazorPage)" render-mode="Server" /> *@
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    // Load saved theme from localStorage
+    let theme = localStorage.getItem("theme") || "auto";
+    document.documentElement.setAttribute("data-bs-theme", theme);
+
+    // Add event listeners to theme toggle buttons
+    document.querySelectorAll("[data-bs-theme-value]").forEach(button => {
+    button.addEventListener("click", function () {
+    let newTheme = this.getAttribute("data-bs-theme-value");
+    document.documentElement.setAttribute("data-bs-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+    });
+    });
+    });
+</script>
+
+
+
+
+<div class="container">
+    <!-- Search Form -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            @using (Html.BeginUmbracoForm("SearchGame", "SearchSurface", FormMethod.Post, new { @class = "d-flex", @id = "searchForm" }))
+            {
+                <div class="input-group search-box">
+                    <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="Search for a game" aria-label="Search">
+                    <button class="input-group-text search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Search Results Grid -->
+    <div class="search-container">
+        @foreach (var item in Model.Games)
+        {
+            @using (Html.BeginUmbracoForm("GameDetails", "GameSurface", FormMethod.Post))
+            {
+                <div class="game-card">
+                    <button class="btn game-card text-white rounded overflow-hidden transition-all d-flex flex-column position-relative cursor-pointer z-1 w-100 p-0 border-0 text-start">
+                        <a href="/GamePage" class="text-decoration-none">
+                            <!-- Game Media -->
+                            <div class="game-media-container">
+                                <img src="@(string.IsNullOrEmpty(item.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : item.BackgroundImage)"
+                                     class="game-image" alt="@item.Name" />
+                            </div>
+
+                            <!-- Game Info -->
+                            <div class="game-info">
+                                <h2 class="game-title">@item.Name</h2>
+                                <p class="game-meta">
+                                    @if (item.Released != null)
+                                    {
+                                        <span class="game-date">@item.Released</span>
+                                    }
+                                    @if (item.Metacritic != null)
+                                    {
+                                        <span class="game-rating">@item.Metacritic ★</span>
+                                    }
+                                </p>
+                                <p class="game-platforms">
+                                    @(item.Platforms?.Any() == true
+                                        ? string.Join(", ", item.Platforms.Select(p => p.PlatformDetails?.Name ?? "Unknown"))
+                                        : "No platforms available")
+                                </p>
+                                <p class="game-genres">
+                                    @(item.Genres?.Any() == true
+                                        ? string.Join(", ", item.Genres.Select(g => g.Name))
+                                        : "No genres available")
+                                </p>
+                            </div>
+                        </a>
+                    </button>
+
+                    <div class="game-hover-info">
+                        <p><strong>Playtime:</strong> @item.Playtime hours</p>
+                        <p><strong>Rating:</strong> @item.Rating</p>
+                        <p><strong>ESRB:</strong> @(item.EsrbRating?.Name ?? "Not Rated")</p>
+                    </div>
+
+
+                    <!-- Add Game Button -->
+                    @*                 @using (Html.BeginUmbracoForm("AddGame", "GameSurface", FormMethod.Post))
+                { *@
+                    <input type="hidden" name="id" value="@item.Id" />
+                    <input type="hidden" name="name" value="@item.Name" />
+                    <input type="hidden" name="backgroundImage" value="@item.BackgroundImage" />
+                    <input type="hidden" name="released" value="@item.Released" />
+                    <input type="hidden" name="metacritic" value="@item.Metacritic" />
+                    <input type="hidden" name="platforms" value="@string.Join(",", item.Platforms?.Select(p => p.PlatformDetails?.Name) ?? new List<string>())" />
+                    <input type="hidden" name="genres" value="@string.Join(",", item.Genres?.Select(g => g.Name) ?? new List<string>())" />
+                    <input type="hidden" name="playtime" value="@item.Playtime" />
+                    <input type="hidden" name="rating" value="@item.Rating" />
+                    <input type="hidden" name="esrbRating" value="@item.EsrbRating?.Name" />
+
+@*                     <button type="submit" class="btn btn-primary mt-2">Add Game</button> *@
+                                   
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@* @if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+} *@

@@ -1,0 +1,537 @@
+﻿ @using Umbraco.Cms.Web.Common.PublishedModels;
+@using UmbracoGame.Models;
+@using UmbracoGame.Models.ViewModels;
+
+@inherits UmbracoViewPage<GamePageViewModel>
+
+@{
+    Layout = "root.cshtml";
+}
+
+<style>
+    /* Global Styles */
+    /* Background Image for the Entire Page */
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)') no-repeat center center fixed;
+        background-size: cover;
+        opacity: 0.1; 
+        z-index: -1; 
+    }
+
+    /* Light Mode */
+    body:not(.dark-mode)::before {
+        opacity: 0.3; 
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Header Section */
+    .game-header {
+        position: relative;
+        height: 400px;
+        background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)') no-repeat center center; 
+        background-size: cover;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .game-header-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+    }
+
+    .game-header-content {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        color: white;
+    }
+
+    .game-title {
+        font-size: 3em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .game-meta {
+        font-size: 1.2em;
+        color: #ddd;
+    }
+
+    .game-rating {
+        color: gold;
+    }
+
+    .game-details {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .game-description {
+        font-size: 1.1em;
+        line-height: 1.6;
+        color: inherit;
+        text-align: center;
+    }
+
+    .game-info h3 {
+        font-size: 1.5em;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .game-info p, .game-info ul {
+        font-size: 1em;
+        color: inherit;
+        text-align: center;
+    }
+
+    .game-media {
+        margin-top: 20px;
+        border-radius: 10px;
+        text-align: right;
+    }
+
+        .game-media h3 {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .game-media p {
+            text-align: center;
+        }
+
+
+    .game-screenshots {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Two images per row */
+        grid-template-rows: repeat(2, 1fr); /* Two rows */
+        gap: 10px;
+        width: 560px; /* Match the video width */
+        height: 315px; /* Make sure it's a perfect square */
+        margin-top: 10px;
+    }
+
+        .game-screenshots img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+            .game-screenshots img:hover {
+                transform: scale(1.05);
+            }
+
+    .game-trailers {
+        margin-top: 20px;
+    }
+
+        .game-trailers video, .game-trailers iframe {
+            width: 100%;
+            height: 400px; /* Increase video size */
+            border-radius: 10px;
+        }
+
+    /* View All Button */
+    .view-all-button {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px;
+        cursor: pointer;
+        position: absolute; /* Changed from 'relative' to 'absolute' */
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.6); /* Semi-transparent */
+        font-weight: bold;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+        .view-all-button:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+    /* Popup Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .modal-content {
+        background: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 650px; /* Don't limit unnecessarily */
+        height: auto; /* Expand based on content */
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: visible; /* Ensure full expansion */
+    }
+
+        .modal-content img {
+            width: 100%; /* Fit within modal */
+            height: auto; /* Keep aspect ratio */
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: block;
+            margin: 5px auto; /* Space images out */
+        }
+
+            .modal-content img:hover {
+                transform: scale(1.05);
+            }
+
+    .modal .close-modal {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        font-size: 2em;
+        color: red;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5em;
+        cursor: pointer;
+    }
+
+    /* Sidebar */
+    .game-sidebar {
+        margin-top: 30px;
+    }
+
+        .game-sidebar h3 {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .game-sidebar p {
+            font-size: 1em;
+            color: inherit;
+        }
+
+
+    /* Image Modal Styling */
+    #imageModal .modal-content {
+        max-width: 60%;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+    }
+
+    #imageModal img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+    }
+
+    #imageModal .close-modal {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        font-size: 2em;
+        color: red;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<div class="game-header" style="background-image: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)');">
+    <div class="game-header-overlay"></div>
+    <div class="game-header-content">
+        @if (!string.IsNullOrEmpty(Model.Game.Website))
+        {
+            <h1 class="game-title"><a href="@Model.Game.Website" target="_blank">@Model.Game.Name</a></h1>
+        }
+        else
+        {
+            <h1 class="game-title">@Model.Game.Name</h1>
+        }
+        <p class="game-meta">
+            @if (Model.Game.Released != null)
+            {
+                <span>@Model.Game.Released</span>
+            }
+            @if (Model.Game.Metacritic != null)
+            {
+                <span class="game-rating"> | <i class="fas fa-star"></i> @Model.Game.Metacritic</span>
+            }
+            @if (Model.Game.Playtime != null && Model.Game.Playtime > 0)
+            {
+                <span> | Playtime: @Model.Game.Playtime hours</span>
+            }
+            @if (Model.Game.Rating != null && Model.Game.Rating > 0)
+            {
+                <span> | Rating: @Model.Game.Rating</span>
+            }
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <!-- Details Section -->
+        <div class="col-md-4 order-2 order-md-1">
+            <div class="game-details">
+                <h2>About the Game</h2>
+                <p class="game-description">@Model.Game.Description</p>
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="col-md-4 offset-md-1 order-1 order-md-2">
+            <div class="game-info text-center">
+                <h3>Platforms</h3>
+                <p class="game-platforms">
+                    @(Model.Game.Platforms?.Any() == true
+                        ? string.Join(", ", Model.Game.Platforms.Select(p => p.PlatformDetails?.Name ?? "Unknown"))
+                        : "No platforms available")
+                </p>
+
+                <h3>Genres</h3>
+                <p class="game-genres">
+                    @(Model.Game.Genres?.Any() == true
+                        ? string.Join(", ", Model.Game.Genres.Select(g => g.Name))
+                        : "No genres available")
+                </p>
+
+                <h3>Developers</h3>
+                <p class="game-developers">
+                    @(Model.Game.Developers?.Any() == true
+                        ? string.Join(", ", Model.Game.Developers.Select(d => d.Name))
+                        : "No developers available")
+                </p>
+
+                <h3>Publishers</h3>
+                <p class="game-publishers">
+                    @(Model.Game.Publishers?.Any() == true
+                        ? string.Join(", ", Model.Game.Publishers.Select(p => p.Name))
+                        : "No publishers available")
+                </p>
+
+                <h3>Stores</h3>
+                <ul class="game-stores">
+                    @if (Model.Game.Stores?.Any() == true)
+                    {
+                        @foreach (var store in Model.Game.Stores)
+                        {
+                            <li>@store.StoreDetails?.Name</li>
+                        }
+                    }
+                    else
+                    {
+                        <li>No stores available</li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- Media Section -->
+        <div class="col-md-3 order-3">
+            <div class="game-media">
+                <h3>Trailers & Images</h3>
+                @if (Model.Game.Movies?.Any() == true)
+                {
+                    foreach (var movie in Model.Game.Movies.Take(1))
+                    {
+                        var videoUrl = movie.Data?.HighQuality ?? movie.Preview;
+
+                        if (!string.IsNullOrEmpty(videoUrl))
+                        {
+                            if (videoUrl.Contains("youtube.com"))
+                            {
+                                <!-- Embed YouTube video -->
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/@videoUrl.Split('=')[1]?autoplay=1&loop=1&playlist=@videoUrl.Split('=')[1]" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            }
+                            else
+                            {
+                                <!-- Use standard video tag -->
+                                <video controls class="w-100" autoplay loop>
+                                    <source src="@videoUrl" type="video/mp4" />
+                                    Your browser does not support the video tag.
+                                </video>
+                            }
+                        }
+                        else
+                        {
+                            <p>No valid trailer URL available for this movie.</p>
+                        }
+                    }
+                }
+                else
+                {
+                    <p>No trailers available for this game.</p>
+                }
+                <div class="game-screenshots">
+                    @if (Model.Game.Screenshots?.Any() == true)
+                    {
+                        var screenshotsToShow = Model.Game.Screenshots.Take(4).ToList(); // Take up to 4 screenshots
+
+                        foreach (var screenshot in screenshotsToShow)
+                        {
+                            <div style="position: relative;">
+                                <img src="@screenshot.Image" alt="Screenshot" class="img-fluid" onclick="openImageModal('@screenshot.Image')" />
+
+                                <!-- Show "View All" only if there are 4 or more screenshots -->
+                                @if (screenshotsToShow.Count == 4 && Model.Game.Screenshots.Count > 4 && screenshot == screenshotsToShow.Last())
+                                {
+                                    <div class="view-all-button" onclick="openModal()">View All</div>
+                                }
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No screenshots available</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- Popup Modal -->
+<div id="mediaModal" class="modal">
+    <div class="modal-content p-4">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="media-items">
+            @if (Model.Game.Screenshots?.Any() == true)
+            {
+                foreach (var screenshot in Model.Game.Screenshots)
+                {
+                    <img src="@screenshot.Image" alt="Screenshot" class="img-fluid mb-4" onclick="openImageModal('@screenshot.Image')" />
+                }
+            }
+
+            @if (Model.Game.Movies?.Any() == true)
+            {
+                foreach (var movie in Model.Game.Movies)
+                {
+                    var videoUrl = movie.Data?.HighQuality ?? movie.Preview;
+
+                    if (!string.IsNullOrEmpty(videoUrl))
+                    {
+                        if (videoUrl.Contains("youtube.com"))
+                        {
+                            <!-- Embed YouTube video -->
+                            <iframe width="600" height="355" src="https://www.youtube.com/embed/@videoUrl.Split('=')[1]" frameborder="0" allowfullscreen class="mb-4"></iframe>
+                        }
+                        else
+                        {
+                            <!-- Use standard video tag -->
+                            <video controls class="w-100 mb-4">
+                                <source src="@videoUrl" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
+                        }
+                    }
+                    else
+                    {
+                        <p>No valid trailer URL available for this movie.</p>
+                    }
+                }
+            }
+        </div>
+    </div>
+
+</div>
+<!-- Image Modal -->
+<div id="imageModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeImageModal()">&times;</span>
+        <img id="enlargedImage" src="" alt="Enlarged Screenshot" class="img-fluid" />
+    </div>
+</div>
+
+<script>
+        // Light/Dark mode toggle function
+    function toggleTheme() {
+        document.body.classList.toggle("dark-mode");
+
+        // Save theme in localStorage
+        let theme = document.body.classList.contains("dark-mode") ? "dark" : "light";
+        localStorage.setItem("theme", theme);
+    }
+
+    // Load theme from localStorage on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+    });
+
+
+
+    function openModal() {
+        document.getElementById('mediaModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('mediaModal').style.display = 'none';
+    }
+
+    function openImageModal(imageUrl) {
+        document.getElementById('enlargedImage').src = imageUrl;
+        document.getElementById('imageModal').style.display = 'block';
+    }
+
+    function closeImageModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+</script>

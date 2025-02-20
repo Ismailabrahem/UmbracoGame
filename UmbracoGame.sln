@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UmbracoGame", "UmbracoGame\UmbracoGame.csproj", "{71915D67-06A8-4770-A9D4-AA2501A8A50E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71915D67-06A8-4770-A9D4-AA2501A8A50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71915D67-06A8-4770-A9D4-AA2501A8A50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71915D67-06A8-4770-A9D4-AA2501A8A50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71915D67-06A8-4770-A9D4-AA2501A8A50E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8203D123-E347-4D8D-98F4-BF593D8B534A}
+	EndGlobalSection
+EndGlobal

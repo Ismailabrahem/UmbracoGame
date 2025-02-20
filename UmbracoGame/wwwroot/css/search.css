@@ -1,0 +1,169 @@
+﻿/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    margin: 0;
+    padding: 0;
+}
+
+/* Search Container */
+.search-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: auto;
+}
+
+/* Game Card */
+.game-card {
+    background-color: #1e1e1e;
+    border-radius: 25px;
+    border: 1px solid #000;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+    height: 100%;
+    color: #fff;
+}
+
+    .game-card:hover {
+        transform: scale(1.05);
+        z-index: 10;
+    }
+
+/* Game Image */
+.game-media-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+}
+
+.game-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Game Info */
+.game-info {
+    padding: 15px;
+    text-align: left;
+    flex-grow: 1; /* Allow the info section to grow and fill remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute space evenly */
+}
+
+
+.game-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+    text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.game-meta {
+    font-size: 14px;
+    color: #aaa;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.game-rating {
+    color: gold;
+}
+
+/* Platform Icons */
+.game-platforms {
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+.platform-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Genres */
+.game-genres {
+    font-size: 12px;
+    color: #bbb;
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* Hover Details */
+.game-hover-info {
+    width: 100%;
+    background: #1e1e1e;
+    padding: 20px;
+    font-size: 14px;
+    color: white;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    transition: opacity 0.3s ease-in-out, height 0.3s ease-in-out;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.game-card:hover .game-hover-info {
+    opacity: 1;
+    height: 135px;
+    z-index: 10;
+}
+
+
+/* Search Box */
+.search-box {
+    margin: 20px auto;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--bs-border-color); /* Use Bootstrap's border color variable */
+    background: var(--bs-body-bg); /* Use Bootstrap's background color variable */
+    color: var(--bs-body-color); /* Use Bootstrap's text color variable */
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+}
+
+.search-button {
+    padding: 15px 15px;
+    background: var(--bs-primary); /* Use Bootstrap's primary color variable */
+    border: none;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+    .search-button:hover {
+        background: var(--bs-primary-dark); /* Use a darker shade of the primary color */
+    }
