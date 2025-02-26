@@ -9,26 +9,25 @@
 }
 
 <link href="~/css/search.css" rel="stylesheet" />
-
-@* <component type="typeof(SearchBlazorPage)" render-mode="Server" /> *@
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    // Load saved theme from localStorage
-    let theme = localStorage.getItem("theme") || "auto";
-    document.documentElement.setAttribute("data-bs-theme", theme);
+    document.addEventListener('DOMContentLoaded', function () {
+        var searchButton = document.getElementById('searchButton');
 
-    // Add event listeners to theme toggle buttons
-    document.querySelectorAll("[data-bs-theme-value]").forEach(button => {
-    button.addEventListener("click", function () {
-    let newTheme = this.getAttribute("data-bs-theme-value");
-    document.documentElement.setAttribute("data-bs-theme", newTheme);
-    localStorage.setItem("theme", newTheme);
-    });
-    });
+        // Check if the page is refreshed
+        var isRefreshed = performance.navigation.type === 1 ||
+                          performance.getEntriesByType("navigation")[0].type === "reload";
+
+        // Check if navigated from the navbar
+        var fromNavbar = sessionStorage.getItem('fromNavbar');
+
+        if (searchButton && (isRefreshed || fromNavbar === 'true')) {
+            searchButton.click(); // Auto-click the search button
+        }
+
+        // Clear the flag after pressing the button
+        sessionStorage.removeItem('fromNavbar');
     });
 </script>
-
-
 
 
 <div class="container">
@@ -39,7 +38,7 @@
             {
                 <div class="input-group search-box">
                     <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="Search for a game" aria-label="Search">
-                    <button class="input-group-text search-button">
+                    <button id="searchButton" class="input-group-text search-button" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
@@ -55,7 +54,7 @@
             {
                 <div class="game-card">
                     <button class="btn game-card text-white rounded overflow-hidden transition-all d-flex flex-column position-relative cursor-pointer z-1 w-100 p-0 border-0 text-start">
-                        <a href="/GamePage" class="text-decoration-none">
+                        <a href="/en/GamePage" class="text-decoration-none">
                             <!-- Game Media -->
                             <div class="game-media-container">
                                 <img src="@(string.IsNullOrEmpty(item.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : item.BackgroundImage)"
@@ -96,33 +95,35 @@
                     </div>
 
 
-                    <!-- Add Game Button -->
-                    @*                 @using (Html.BeginUmbracoForm("AddGame", "GameSurface", FormMethod.Post))
-                { *@
-                    <input type="hidden" name="id" value="@item.Id" />
-                    <input type="hidden" name="name" value="@item.Name" />
-                    <input type="hidden" name="backgroundImage" value="@item.BackgroundImage" />
-                    <input type="hidden" name="released" value="@item.Released" />
-                    <input type="hidden" name="metacritic" value="@item.Metacritic" />
-                    <input type="hidden" name="platforms" value="@string.Join(",", item.Platforms?.Select(p => p.PlatformDetails?.Name) ?? new List<string>())" />
-                    <input type="hidden" name="genres" value="@string.Join(",", item.Genres?.Select(g => g.Name) ?? new List<string>())" />
-                    <input type="hidden" name="playtime" value="@item.Playtime" />
-                    <input type="hidden" name="rating" value="@item.Rating" />
-                    <input type="hidden" name="esrbRating" value="@item.EsrbRating?.Name" />
 
-@*                     <button type="submit" class="btn btn-primary mt-2">Add Game</button> *@
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <input type="hidden" name="Name" value="@item.Name" />
+                        <input type="hidden" name="Slug" value="@item.Slug" />
+                        <input type="hidden" name="Description" value="@item.Description" />
+                        <input type="hidden" name="Metacritic" value="@item.Metacritic" />
+                        <input type="hidden" name="Released" value="@item.Released" />
+                        <input type="hidden" name="BackgroundImage" value="@item.BackgroundImage" />
+                        <input type="hidden" name="Rating" value="@item.Rating" />
+                        <input type="hidden" name="Playtime" value="@item.Playtime" />
+                        <input type="hidden" name="Platforms" value="@string.Join(",", item.Platforms?.Select(p => p.PlatformDetails?.Name) ?? new List<string>())" />
+                        <input type="hidden" name="Genres" value="@string.Join(",", item.Genres?.Select(g => g.Name) ?? new List<string>())" />
+                        <input type="hidden" name="EsrbRating" value="@item.EsrbRating?.Name" />
+
+                    
                                    
                 </div>
+
             }
         }
     </div>
 </div>
 
-@* @if (TempData["SuccessMessage"] != null)
+
+@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-} *@
+} 

@@ -1,14 +1,37 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-
+﻿@using System.Globalization
+@using Umbraco.Cms.Web.Common
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@using UmbracoGame.Interfaces;
+@inject UmbracoHelper umbracoHelper
 @{
     Layout = null;
+
+    var metaDescription = string.Empty;
+    if (Model is IPageModel m)
+    {
+        metaDescription = m.Content is ISeo seo && !seo.MetaDescription.IsNullOrWhiteSpace() ? seo.MetaDescription : Model.Name;
+    }
+
+
+
+
 }
 
 <!doctype html>
-<html lang="en" data-bs-theme="auto">
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="auto">
 <head>
+    <!-- Google Tag Manager -->
+    <script>
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5RJGNGCF');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta name="description" content="@metaDescription">
     @* <base href="https://getbootstrap.com" /> *@
-    <base href="~/">
+    <base href="~/#">
     <script src="https://getbootstrap.com/docs/5.3/assets/js/color-modes.js"></script>
 
     <title>Carousel Template · Bootstrap v5.3</title>
@@ -122,6 +145,27 @@
                 max-height: 100%;
             }
         }
+
+
+        #cookieSettingsBtn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #712cf9;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #cookieSettingsBtn:hover {
+            background: #6528e0;
+        }
+
     </style>
 
     <!-- Custom styles for this template -->
@@ -130,6 +174,12 @@
     <script type="text/javascript" src="https://getbootstrap.com/docs/5.3/examples/carousel/iTfYf8_-gcWRVADunqm74u4VY8L-XkTBlAlgKmjOCZdvdkV7L5BxmimJ9MRr8u73ja_0JTGAQDbfDHKUHa8Dmg=="></script>
 </head>
 <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5RJGNGCF"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
         <symbol id="check2" viewBox="0 0 16 16">
             <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
@@ -190,36 +240,29 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Home</a>
+                        <li class="nav-item" id="home">
+                            <a class="nav-link active" href="/en/" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Home", @CultureInfo.CurrentCulture)</a>
                         </li>
 
                         <!-- Dynamic Search Link -->
-                        <li class="nav-item" id="searchLinkEn" style="display: none;">
-                            <a class="nav-link active" href="/en/search/">Search</a>
+                        <li class="nav-item" id="searchNavBar">
+                            <a class="nav-link active" href="/en/search/" onclick="sessionStorage.setItem('fromNavbar', 'true');">@umbracoHelper.GetDictionaryValue("Search", @CultureInfo.CurrentCulture)</a>
                         </li>
-                        <li class="nav-item" id="searchLinkSv" style="display: none;">
-                            <a class="nav-link active" href="/sv/sok/">Sök</a>
+
+                        <li class="nav-item" id="aboutus">
+                            <a class="nav-link active" href="/en/aboutus" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Home", @CultureInfo.CurrentCulture)</a>
                         </li>
                     </ul>
 
-                    <!-- Language Selector -->
-                    <div class="dropdown me-2">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span id="currentLanguage">Language</span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLanguage('en')">English</a></li>
-                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="changeLanguage('sv')">Svenska</a></li>
-                        </ul>
-                    </div>
+                   
+                        @Html.Partial("LanguageSwitcher")
 
                     <!-- Dynamic Search Form -->
                     <div class="d-flex" id="searchForm">
                         @using (Html.BeginUmbracoForm("SearchGame", "SearchSurface", FormMethod.Post, new { @class = "d-flex", @id = "searchForm" }))
                         {
                             <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="Search for a game" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit" id="searchButton">Search</button>
+                            <button class="btn btn-outline-success" type="submit" id="searchButton">@umbracoHelper.GetDictionaryValue("Search", @CultureInfo.CurrentCulture)</button>
                         }
                     </div>
                 </div>
@@ -227,75 +270,35 @@
         </nav>
     </header>
 
-    <script>
-            // Function to change the language while retaining the current page and query params
-        function changeLanguage(language) {
-            let currentUrl = window.location.href;
-            const urlParts = new URL(currentUrl);
-            let path = urlParts.pathname;
-
-            // Detect current language in the URL
-            const isEnglish = path.includes("/en/");
-            const isSwedish = path.includes("/sv/");
-
-            if (isEnglish) {
-                path = path.replace("/en/", `/${language}/`);
-            } else if (isSwedish) {
-                path = path.replace("/sv/", `/${language}/`);
-            } else {
-                // If there's no language in the URL, assume Swedish is default
-                path = `/${language}${path}`;
-            }
-
-            // Special case for search page
-            if (isEnglish && language === "sv") {
-                path = path.replace("/search", "/sok");
-            } else if (isSwedish && language === "en") {
-                path = path.replace("/sok", "/search");
-            }
-
-            // Save language preference
-            localStorage.setItem('selectedLanguage', language);
-
-            // Refresh page with new language
-            window.location.href = path + urlParts.search;
-        }
-
-        // Function to update UI based on language
-        function updateLanguageUI(language) {
-            const searchLinkEn = document.getElementById("searchLinkEn");
-            const searchLinkSv = document.getElementById("searchLinkSv");
-            const currentLanguageSpan = document.getElementById("currentLanguage");
-
-            if (language === "en") {
-                if (searchLinkEn) searchLinkEn.style.display = "block";
-                if (searchLinkSv) searchLinkSv.style.display = "none";
-                if (currentLanguageSpan) currentLanguageSpan.textContent = "English";
-            } else {
-                if (searchLinkEn) searchLinkEn.style.display = "none";
-                if (searchLinkSv) searchLinkSv.style.display = "block";
-                if (currentLanguageSpan) currentLanguageSpan.textContent = "Svenska";
-            }
-        }
-
-        // Ensure language UI updates on page load
-        document.addEventListener("DOMContentLoaded", function () {
-            const currentLang = window.location.pathname.includes("/en/") ? "en" : "sv";
-            const selectedLanguage = localStorage.getItem("selectedLanguage") || currentLang;
-
-            updateLanguageUI(selectedLanguage);
-        });
-    </script>
-
 
     @RenderBody()
-
     <!-- FOOTER -->
     <footer class="container">
         <p class="float-end"><a href="https://localhost:44322/">Back to top</a></p>
         <p>&copy; 2017–2024 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+
     </footer>
 
-    <script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Load Bootstrap -->
+    <script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <!-- CookieTractor Scripts - Ensure correct order -->
+    <script src="https://cdn.cookietractor.com/cookietractor.js"
+            data-lang="sv-SE" data-id="95cbffbc-02b4-4cfc-bd48-55ac68595208"></script>
+    <!-- Cookie Declaration Container -->
+    <button id="cookieSettingsBtn" onclick="cookieTractor.openConsentSettings()">
+        🍪 
+    </button>
+    <script src="https://cdn.cookietractor.com/cookietractor-declaration.js"
+            data-lang="sv-SE" data-id="95cbffbc-02b4-4cfc-bd48-55ac68595208" defer></script>
+
+        <!-- Page content here -->
+
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>
+
+

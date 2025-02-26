@@ -51,8 +51,38 @@ namespace UmbracoGame.Controllers
 
             return View("gamePage", model);
         }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public RedirectToUmbracoPageResult AddGame(GameDetails model)
+        {
+            if (model != null && !string.IsNullOrEmpty(model.Id))
+            {
+                model.Culture = _variationContextAccessor.VariationContext.Culture;
+
+
+                    if (!_gameService.GameExists(model.Id))
+                    {
+                        _gameService.AddGame(model, "GameId");
+                        TempData["SuccessMessage"] = "Game added successfully!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "Game already exists!";
+                    }
+
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Invalid game details!";
+            }
+
+            return RedirectToCurrentUmbracoPage();
+        }
     }
 }
 
 
-    

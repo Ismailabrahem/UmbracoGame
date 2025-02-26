@@ -9,5 +9,7 @@ namespace UmbracoGame.Models.ViewModels
         public StartPageViewModel(Start content, IUmbracoContextAccessor umbracoContextAccessor) : base(content, umbracoContextAccessor)
         {
         }
+
+
     }
 }

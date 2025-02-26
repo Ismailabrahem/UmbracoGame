@@ -1,0 +1,30 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using UmbracoGame.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ErrorPageViewModel>
+@{
+	Layout = "root.cshtml";
+}
+<script src="https://getbootstrap.com/docs/5.3/assets/js/color-modes.js"></script>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> @Model.Content.Heading </title>
+    <link rel="stylesheet" href="/css/error.css">
+    <!-- Add a Google Font for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Add the image using the URL -->
+        <img src="https://helios-i.mashable.com/imagery/articles/04i1KeWXNed98aQakEZjeOs/hero-image.fill.size_1200x900.v1623362896.jpg" alt="404 Illustration" class="illustration">
+        <h1>@Model.Content.Heading</h1>
+        <h2>@Model.Content.Subtitle</h2>
+        <h3>@Model.Content.Description</h3>
+        <a href="/" class="home-button">Go Back Home</a>
+    </div>
+
+</body>
+</html>
+

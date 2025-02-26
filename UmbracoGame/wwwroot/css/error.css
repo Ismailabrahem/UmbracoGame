@@ -1,0 +1,114 @@
+﻿/* Define custom color variables for light theme */
+:root {
+    --body-bg: #ffffff;
+    --body-color: #000000;
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --button-bg: #ffffff;
+    --button-hover-bg: #f4f4f9;
+    --text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+    --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --illustration-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Define custom color variables for dark theme */
+[data-bs-theme="dark"] {
+    --body-bg: #1e1e1e;
+    --body-color: #ffffff;
+    --primary-color: #764ba2;
+    --secondary-color: #667eea;
+    --button-bg: #333333;
+    --button-hover-bg: #444444;
+    --text-shadow: 4px 4px 10px rgba(255, 255, 255, 0.3);
+    --box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    --illustration-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Reset some default styles */
+body, h1, p, a {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Center the content and add a gradient background */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--body-color);
+    flex-direction: column;
+}
+
+.container {
+    text-align: center;
+    max-width: 800px;
+    padding: 20px;
+    width: 100%;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 200;
+    color: var(--body-color);
+    margin-bottom: 20px;
+    text-shadow: var(--text-shadow);
+    animation: fadeIn 1s ease-in-out;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 200;
+    margin-bottom: 10px;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+h3 {
+    font-size: 1rem;
+    margin-bottom: 40px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.home-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 1.25rem;
+    color: var(--primary-color);
+    background-color: var(--button-bg);
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: var(--box-shadow);
+    animation: fadeIn 2.5s ease-in-out;
+}
+
+    .home-button:hover {
+        background-color: var(--button-hover-bg);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+/* Add a fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add styles for the illustration */
+.illustration {
+    width: 100%; /* Make the image responsive */
+    max-width: 600px; /* Limit the maximum width */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 30px; /* Space between the image and the heading */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: var(--illustration-shadow);
+}

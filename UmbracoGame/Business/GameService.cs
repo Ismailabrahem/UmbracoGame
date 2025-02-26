@@ -4,6 +4,8 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using UmbracoGame.Business.Services.Interfaces;
 using UmbracoGame.Models;
+using Umbraco.Cms.Web.Common.PublishedModels;
+using MimeKit;
 
 namespace UmbracoGame.Business
 {
@@ -121,7 +123,7 @@ namespace UmbracoGame.Business
         {
             try
             {
-                var apiUrl = $"https://api.rawg.io/api/games/{Id}/movies?key=YOUR_RAWG_API_KEY";
+                var apiUrl = $"https://api.rawg.io/api/games/{Id}/movies?key=2f1cdd6ea8db42419d774d7d9a979ea8";
                 var response = await _httpClient.GetStringAsync(apiUrl);
                 var result = JsonConvert.DeserializeObject<ApiResponse<List<Movie>>>(response);
 
@@ -172,5 +174,68 @@ namespace UmbracoGame.Business
             public T Results { get; set; }
 
         }
+
+
+        public bool GameExists(string id)
+        {
+            if (_umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext))
+            {
+                var content = umbracoContext.Content;
+                var settingsPage = content.GetAtRoot().DescendantsOrSelf<Settings>().FirstOrDefault();
+
+                if (settingsPage != null)
+                {
+                    var gamesContainer = settingsPage.GamesContainer;
+
+                    if (gamesContainer != null)
+                    {
+                        var games = gamesContainer.Children<Game>();
+                        foreach (var item in games)
+                        {
+                            if (item.GameId == id)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+        public void AddGame(GameDetails item, string gameIdAlias)
+        {
+            if (_umbracoContextAccessor.TryGetUmbracoContext(out var umbracoContext))
+            {
+                var content = umbracoContext.Content;
+                var settingsPage = content?.GetAtRoot().DescendantsOrSelf<Settings>().FirstOrDefault();
+
+                if (settingsPage != null)
+                {
+                    if (settingsPage.GamesContainer != null)
+                    {
+                        var gamePage = _contentService.Create(item.Name, settingsPage.GamesContainer.Id, nameof(Game).ToLower());
+                        // Set values for the game content
+                        gamePage.SetCultureName(item.Name, item.Culture);
+                        gamePage.SetValue(gameIdAlias, item.Id);
+                        gamePage.SetValue("slug", item.Slug);
+                        gamePage.SetValue("metacriticScore", item.Metacritic);
+                        gamePage.SetValue("releaseDate", item.Released);
+                        gamePage.SetValue("rating", item.Rating);
+                        gamePage.SetValue("playtime", item.Playtime);
+
+                        // Save and publish the game
+                        var save = _contentService.Save(gamePage);
+
+                        if (save.Success)
+                        {
+                            _contentService.Publish(gamePage, [item.Culture]);
+                        }
+                    }
+
+                }
+            }
+        }
+
     }
 }

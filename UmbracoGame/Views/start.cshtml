@@ -60,76 +60,17 @@
         </button>
     </div>
     <div class="album py-5 bg-body-tertiary">
-        <div class="container">
 
-            <!-- Genre: Action -->
-            <h5 class="mb-3">Action</h5>
-            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
-                <div class="col">
-                    <div class="card shadow-sm h-100">
+        <button>
+            <a href="https://en.bandainamcoent.eu/elden-ring/elden-ring">tryck på mig</a>
+            </button>
+           
 
-                        <img src="https://localhost:44328/media/movies/inception.webp" class="movie-card" />
-                        <div class="card-body">
-                            <p class="card-text">A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-body-secondary">2h 28m</small>
-                            </div>
-                        </div>
-                        <a href="/filmer/inception" class="stretched-link"></a>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://localhost:44328/media/movies/seven.jpg" class="movie-card" />
-                        <div class="card-body">
-                            <p class="card-text">Two detectives, a rookie and a veteran, hunt a serial killer who uses the seven deadly sins as his motives.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-body-secondary">2h 7m</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- More cards for "Action" genre -->
-            </div>
 
-            <!-- Genre: Comedy -->
-            <h5 class="mt-5 mb-3">Comedy</h5>
-            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
-                <div class="col">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://localhost:44328/media/movies/superbad.jpg" class="movie-card" />
-                        <div class="card-body">
-                            <p class="card-text">Two co-dependent high school seniors are forced to deal with separation anxiety after their plan to stage a booze-soaked party goes awry.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-body-secondary">1h 53m</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- More cards for "Comedy" genre -->
-            </div>
 
-            <!-- Genre: Drama -->
-            <h5 class="mt-5 mb-3">Drama</h5>
-            <div class="row row-cols-1 row-cols-sm-3 row-cols-md-4 g-4">
-                <div class="col">
-                    <div class="card shadow-sm h-100">
-                        <img src="https://localhost:44328/media/movies/house-of-gucci.jpg" class="movie-card" />
-                        <div class="card-body">
-                            <p class="card-text">When Patrizia Reggiani, an outsider from humble beginnings, marries into the Gucci family, her unbridled ambition begins to unravel their legacy and triggers a reckless spiral of betrayal, decadence, revenge, and ultimately...murder.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-body-secondary">2h 17m</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- More cards for "Drama" genre -->
-            </div>
 
-            <!-- Add more genres as needed -->
-        </div>
     </div>
-
+    @await Component.InvokeAsync("RenderForm", new { formId = Model.Content.Form, Theme = "default" })
 </main>
