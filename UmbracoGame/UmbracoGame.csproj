@@ -7,9 +7,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="wwwroot\assets\**" />
+    <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="wwwroot\assets\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="wwwroot\assets\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="wwwroot\assets\**" />
+    <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +28,10 @@
     <PackageReference Include="Umbraco.Forms.Core" Version="15.1.0" />
     <PackageReference Include="Umbraco.Forms.Web" Version="15.1.0" />
     <RuntimeHostConfigurationOption Include="System.Globalization.AppLocalIcu" Value="72.1.0.3" Condition="$(RuntimeIdentifier.StartsWith('linux')) or $(RuntimeIdentifier.StartsWith('win')) or ('$(RuntimeIdentifier)' == '' and !$([MSBuild]::IsOSPlatform('osx')))" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Partials\Forms\Themes\" />
   </ItemGroup>
 
   <PropertyGroup>

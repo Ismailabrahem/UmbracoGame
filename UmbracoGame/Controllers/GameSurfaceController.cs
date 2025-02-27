@@ -57,31 +57,26 @@ namespace UmbracoGame.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public RedirectToUmbracoPageResult AddGame(GameDetails model)
+        public JsonResult AddGame(GameDetails model)
         {
             if (model != null && !string.IsNullOrEmpty(model.Id))
             {
                 model.Culture = _variationContextAccessor.VariationContext.Culture;
 
-
-                    if (!_gameService.GameExists(model.Id))
-                    {
-                        _gameService.AddGame(model, "GameId");
-                        TempData["SuccessMessage"] = "Game added successfully!";
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = "Game already exists!";
-                    }
-
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "Invalid game details!";
+                if (!_gameService.GameExists(model.Id))
+                {
+                    _gameService.AddGame(model, "GameId");
+                    return Json(new { success = true, message = "Game added successfully!" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Game already exists!" });
+                }
             }
 
-            return RedirectToCurrentUmbracoPage();
+            return Json(new { success = false, message = "Invalid game details!" });
         }
+
     }
 }
 

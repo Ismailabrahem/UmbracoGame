@@ -6,15 +6,11 @@
 @{
     Layout = null;
 
-    var metaDescription = string.Empty;
-    if (Model is IPageModel m)
-    {
-        metaDescription = m.Content is ISeo seo && !seo.MetaDescription.IsNullOrWhiteSpace() ? seo.MetaDescription : Model.Name;
-    }
-
-
-
-
+    // var metaDescription = string.Empty;
+    // if (Model is IPageModel m)
+    // {
+    //     metaDescription = m.Content is ISeo seo && !seo.MetaDescription.IsNullOrWhiteSpace() ? seo.MetaDescription : Model.Name;
+    // }
 }
 
 <!doctype html>
@@ -29,26 +25,18 @@
         })(window,document,'script','dataLayer','GTM-5RJGNGCF');</script>
     <!-- End Google Tag Manager -->
 
-    <meta name="description" content="@metaDescription">
-    @* <base href="https://getbootstrap.com" /> *@
-    <base href="~/#">
     <script src="https://getbootstrap.com/docs/5.3/assets/js/color-modes.js"></script>
-
-    <title>Carousel Template · Bootstrap v5.3</title>
-
+    <title>Spelsidan</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@docsearch/css@3">
+@*     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@docsearch/css@3"> *@
 
     <link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-    <link rel="icon" href="https://getbootstrap.com/docs/5.3/assets/img/favicons/favicon.ico">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
 
     <style>
         .bd-placeholder-img {
@@ -149,8 +137,8 @@
 
         #cookieSettingsBtn {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
+            bottom: 15px;
+            left: 15px;
             background-color: #712cf9;
             color: white;
             border: none;
@@ -167,11 +155,6 @@
         }
 
     </style>
-
-    <!-- Custom styles for this template -->
-    <link href="https://getbootstrap.com/docs/5.3/examples/carousel/carousel.css" rel="stylesheet">
-    <script type="text/javascript" src="https://getbootstrap.com/docs/5.3/examples/carousel/iUSfqrIpmhX1ciLY_yojCnRuisgapeSCiClJ6OoZaIpE-EevoAOj3Eiknjy6eSm7oVf6yKeyk8Dh_M0eblwivQ=="></script>
-    <script type="text/javascript" src="https://getbootstrap.com/docs/5.3/examples/carousel/iTfYf8_-gcWRVADunqm74u4VY8L-XkTBlAlgKmjOCZdvdkV7L5BxmimJ9MRr8u73ja_0JTGAQDbfDHKUHa8Dmg=="></script>
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -234,25 +217,25 @@
     <header data-bs-theme="dark">
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#"></a>
+                <a class="navbar-brand" href="/#">Spelsida</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                        <li class="nav-item" id="home">
-                            <a class="nav-link active" href="/en/" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Home", @CultureInfo.CurrentCulture)</a>
+@*                         <li class="nav-item" id="home">
+                            <a class="nav-link active" href="@Model.Content.Url()" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Home", @CultureInfo.CurrentCulture)</a>
                         </li>
 
                         <!-- Dynamic Search Link -->
                         <li class="nav-item" id="searchNavBar">
-                            <a class="nav-link active" href="/en/search/" onclick="sessionStorage.setItem('fromNavbar', 'true');">@umbracoHelper.GetDictionaryValue("Search", @CultureInfo.CurrentCulture)</a>
+                            <a class="nav-link active" href="@Model.Content.Url()#search" onclick="sessionStorage.setItem('fromNavbar', 'true');">@umbracoHelper.GetDictionaryValue("Search", @CultureInfo.CurrentCulture)</a>
                         </li>
 
                         <li class="nav-item" id="aboutus">
-                            <a class="nav-link active" href="/en/aboutus" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Home", @CultureInfo.CurrentCulture)</a>
-                        </li>
-                    </ul>
+                            <a class="nav-link active" href="@Model.Content.Url()#aboutus" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Aboutus", @CultureInfo.CurrentCulture)</a>
+                        </li>*@
+                    </ul> 
 
                    
                         @Html.Partial("LanguageSwitcher")
@@ -261,7 +244,7 @@
                     <div class="d-flex" id="searchForm">
                         @using (Html.BeginUmbracoForm("SearchGame", "SearchSurface", FormMethod.Post, new { @class = "d-flex", @id = "searchForm" }))
                         {
-                            <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="Search for a game" aria-label="Search">
+                            <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="@umbracoHelper.GetDictionaryValue("SearchPlaceholder", @CultureInfo.CurrentCulture)" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit" id="searchButton">@umbracoHelper.GetDictionaryValue("Search", @CultureInfo.CurrentCulture)</button>
                         }
                     </div>
@@ -274,27 +257,24 @@
     @RenderBody()
     <!-- FOOTER -->
     <footer class="container">
-        <p class="float-end"><a href="https://localhost:44322/">Back to top</a></p>
-        <p>&copy; 2017–2024 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p class="float-end"><a href="https://localhost:44322/">@umbracoHelper.GetDictionaryValue("Backtotop", @CultureInfo.CurrentCulture)</a></p>
+        <p>&copy; 2025, Spelsidan, Inc &middot; <a href="/#">@umbracoHelper.GetDictionaryValue("Privacy", @CultureInfo.CurrentCulture)</a> &middot; <a href="/#">@umbracoHelper.GetDictionaryValue("Terms", @CultureInfo.CurrentCulture)</a></p>
 
     </footer>
-
     <!-- Load Bootstrap -->
     <script src="https://getbootstrap.com/docs/5.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
     <!-- CookieTractor Scripts - Ensure correct order -->
     <script src="https://cdn.cookietractor.com/cookietractor.js"
-            data-lang="sv-SE" data-id="95cbffbc-02b4-4cfc-bd48-55ac68595208"></script>
+            data-lang="@CultureInfo.CurrentCulture" data-id="95cbffbc-02b4-4cfc-bd48-55ac68595208"></script>
     <!-- Cookie Declaration Container -->
-    <button id="cookieSettingsBtn" onclick="cookieTractor.openConsentSettings()">
-        🍪 
-    </button>
     <script src="https://cdn.cookietractor.com/cookietractor-declaration.js"
-            data-lang="sv-SE" data-id="95cbffbc-02b4-4cfc-bd48-55ac68595208" defer></script>
-
-        <!-- Page content here -->
-
+            data-lang="@CultureInfo.CurrentCulture" data-id="95cbffbc-02b4-4cfc-bd48-55ac68595208" defer></script>
+    <button id="cookieSettingsBtn" onclick="cookieTractor.openConsentSettings()">
+        🍪
+    </button>
+        <!-- Form Validation -->
         <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.0.0.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
         <script src="https://ajax.aspnetcdn.com/ajax/mvc/5.2.3/jquery.validate.unobtrusive.min.js"></script>

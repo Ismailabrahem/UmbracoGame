@@ -1,5 +1,115 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using UmbracoGame.Models.ViewModels
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<AboutUsPageViewModel>
 @{
 	Layout = "root.cshtml";
 }
+
+
+
+<main>
+    <link rel="stylesheet" href="/css/aboutus.css">
+    <header>
+        <h1>Welcome to Spelsidan</h1>
+        <p>Your ultimate guide to the gaming universe</p>
+    </header>
+
+    <section id="about">
+        <div class="container">
+            <h2>Our Story</h2>
+            <p>Spelsidan was founded by a group of passionate gamers who wanted to create a platform where players of all backgrounds could come together to discover, discuss, and celebrate their favorite games. Whether you're a casual player or a hardcore enthusiast, we believe that gaming is more than just a pastime—it's an art form, a culture, and a way to connect with others across the globe. Our journey began with a simple idea: to provide honest, in-depth, and engaging content that helps gamers make informed decisions. Over time, Spelsidan has grown into a hub for reviews, industry news, and community-driven discussions, making it one of the most trusted gaming sites online. We are constantly evolving, listening to our audience, and working to create the best experience possible for every gamer out there.</p>
+        </div>
+    </section>
+
+    <section id="mission">
+        <div class="container">
+            <h2>Our Mission & Vision</h2>
+            <p>
+                At Spelsidan, our mission is to offer gamers a reliable and comprehensive source of information about the gaming industry. We are committed to delivering in-depth, unbiased analyses of the latest and most exciting games, helping players navigate the ever-growing world of gaming. From AAA blockbusters to hidden indie gems, we cover it all, ensuring that no great game goes unnoticed.
+                We believe in the power of community, where gamers can share their experiences, opinions, and insights in a respectful and engaging environment. Our vision is to create a space where players can stay informed, inspired, and connected—whether they are looking for expert reviews, gameplay breakdowns, or the latest industry trends. With quality, integrity, and a deep passion for gaming at our core, Spelsidan aims to be more than just a website; we want to be a trusted companion for every gamer’s journey.
+            </p>
+
+        </div>
+    </section>
+
+    <section id="team">
+        <div class="container">
+            <h2>Meet the Team</h2>
+            <div class="team-members">
+                <div class="team-member">
+
+                    <h3>Milan</h3>
+                    <p>Founder & Editor-in-Chief</p>
+                </div>
+                <div class="team-member">
+
+                    <h3>Isse</h3>
+                    <p>Founder</p>
+                </div>
+                <div class="team-member">
+
+                    <h3>Berke</h3>
+                    <p>CEO</p>
+                </div>
+                <div class="team-member">
+
+                    <h3>Yasin</h3>
+                    <p>Community Manager</p>
+                </div>
+                <div class="team-member">
+
+                    <h3>Bashir</h3>
+                    <p>Community Manager</p>
+                </div>
+                <div class="team-member">
+
+                    <h3>Angelo</h3>
+                    <p>Community Manager</p>
+                </div>
+                <div class="team-member">
+
+                    <h3>Raouf</h3>
+                    <p>Community Manager</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials">
+        <div class="container">
+            <h2>What Our Users Say</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    <p>"Spelsidan always helps me find the best new indie games. I love their reviews!"</p>
+                    <h4>- Michael, Sweden</h4>
+                </div>
+                <div class="testimonial">
+                    <p>"A must-visit for any gamer. Their top charts are always on point!"</p>
+                    <h4>- Sarah, UK</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2>Contact Us</h2>
+            <p>Have a question or suggestion? Reach out to us!</p>
+            <p>Email: <a href="mailto:contact@spelsidan.com">contact@spelsidan.com</a></p>
+            <p>Phone: (+46) 739271848</p>
+            <p>Adress: Nackademin, Tomteboda vägen 6</p>
+            <p>Follow us on social media:</p>
+
+        </div>
+    </section>
+
+    <section id="cta">
+        <div class="container">
+            <h2>Join the Community</h2>
+            <p>Stay updated with the latest gaming news, reviews, and discussions.</p>
+            <a href="#" class="btn">Subscribe Now</a>
+        </div>
+    </section>
+
+</main>

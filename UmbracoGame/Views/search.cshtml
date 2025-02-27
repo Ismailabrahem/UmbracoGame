@@ -1,7 +1,9 @@
-﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using System.Globalization
+@using Umbraco.Cms.Web.Common
+@using Umbraco.Cms.Web.Common.PublishedModels;
 @using UmbracoGame.Models.ViewModels;
 @using UmbracoGame.Models;
-
+@inject UmbracoHelper umbracoHelper
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<SearchPageViewModel>
 
 @{
@@ -37,7 +39,7 @@
             @using (Html.BeginUmbracoForm("SearchGame", "SearchSurface", FormMethod.Post, new { @class = "d-flex", @id = "searchForm" }))
             {
                 <div class="input-group search-box">
-                    <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="Search for a game" aria-label="Search">
+                    <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="@umbracoHelper.GetDictionaryValue("SearchPlaceholder", @CultureInfo.CurrentCulture)" aria-label="Search">
                     <button id="searchButton" class="input-group-text search-button" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
@@ -57,7 +59,7 @@
                         <a href="/en/GamePage" class="text-decoration-none">
                             <!-- Game Media -->
                             <div class="game-media-container">
-                                <img src="@(string.IsNullOrEmpty(item.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : item.BackgroundImage)"
+                                <img src="@(string.IsNullOrEmpty(item.BackgroundImage) ? "https://localhost:44322/media/erek3if5/default-game-poster.jpg" : item.BackgroundImage)"
                                      class="game-image" alt="@item.Name" />
                             </div>
 
@@ -77,21 +79,21 @@
                                 <p class="game-platforms">
                                     @(item.Platforms?.Any() == true
                                         ? string.Join(", ", item.Platforms.Select(p => p.PlatformDetails?.Name ?? "Unknown"))
-                                        : "No platforms available")
+                                        : @umbracoHelper.GetDictionaryValue("Noplatforms", @CultureInfo.CurrentCulture))
                                 </p>
                                 <p class="game-genres">
                                     @(item.Genres?.Any() == true
                                         ? string.Join(", ", item.Genres.Select(g => g.Name))
-                                        : "No genres available")
+                                        : @umbracoHelper.GetDictionaryValue("Nogenres", @CultureInfo.CurrentCulture))
                                 </p>
                             </div>
                         </a>
                     </button>
 
                     <div class="game-hover-info">
-                        <p><strong>Playtime:</strong> @item.Playtime hours</p>
-                        <p><strong>Rating:</strong> @item.Rating</p>
-                        <p><strong>ESRB:</strong> @(item.EsrbRating?.Name ?? "Not Rated")</p>
+                        <p><strong>@umbracoHelper.GetDictionaryValue("Playtime", @CultureInfo.CurrentCulture):</strong> @item.Playtime hours</p>
+                        <p><strong>@umbracoHelper.GetDictionaryValue("Rating", @CultureInfo.CurrentCulture):</strong> @item.Rating</p>
+                        <p><strong>ESRB:</strong> @(item.EsrbRating?.Name ?? @umbracoHelper.GetDictionaryValue("Noesrb", @CultureInfo.CurrentCulture))</p>
                     </div>
 
 
@@ -117,13 +119,3 @@
         }
     </div>
 </div>
-
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
-} 

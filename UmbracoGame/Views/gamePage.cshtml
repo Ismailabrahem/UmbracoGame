@@ -1,7 +1,9 @@
-﻿ @using Umbraco.Cms.Web.Common.PublishedModels;
+﻿@using System.Globalization
+@using Umbraco.Cms.Web.Common
+ @using Umbraco.Cms.Web.Common.PublishedModels;
 @using UmbracoGame.Models;
 @using UmbracoGame.Models.ViewModels;
-
+@inject UmbracoHelper umbracoHelper
 @inherits UmbracoViewPage<GamePageViewModel>
 
 @{
@@ -9,8 +11,6 @@
 }
 
 <style>
-    /* Global Styles */
-    /* Background Image for the Entire Page */
     body::before {
         content: "";
         position: fixed;
@@ -18,313 +18,33 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)') no-repeat center center fixed;
+        background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "https://localhost:44322/media/erek3if5/default-game-poster.jpg" : Model.Game.BackgroundImage)') no-repeat center center fixed;
         background-size: cover;
-        opacity: 0.1; 
-        z-index: -1; 
+        opacity: 0.1;
+        z-index: -1;
     }
 
     /* Light Mode */
     body:not(.dark-mode)::before {
-        opacity: 0.3; 
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    /* Header Section */
-    .game-header {
-        position: relative;
-        height: 400px;
-        background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)') no-repeat center center; 
-        background-size: cover;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-bottom: 30px;
-    }
-
-    .game-header-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
-    }
-
-    .game-header-content {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        color: white;
-    }
-
-    .game-title {
-        font-size: 3em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .game-meta {
-        font-size: 1.2em;
-        color: #ddd;
-    }
-
-    .game-rating {
-        color: gold;
-    }
-
-    .game-details {
-        margin-top: 30px;
-        text-align: left;
-    }
-
-    .game-description {
-        font-size: 1.1em;
-        line-height: 1.6;
-        color: inherit;
-        text-align: center;
-    }
-
-    .game-info h3 {
-        font-size: 1.5em;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .game-info p, .game-info ul {
-        font-size: 1em;
-        color: inherit;
-        text-align: center;
-    }
-
-    .game-media {
-        margin-top: 20px;
-        border-radius: 10px;
-        text-align: right;
-    }
-
-        .game-media h3 {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .game-media p {
-            text-align: center;
-        }
-
-
-    .game-screenshots {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr); /* Two images per row */
-        grid-template-rows: repeat(2, 1fr); /* Two rows */
-        gap: 10px;
-        width: 560px; /* Match the video width */
-        height: 315px; /* Make sure it's a perfect square */
-        margin-top: 10px;
-    }
-
-        .game-screenshots img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-            .game-screenshots img:hover {
-                transform: scale(1.05);
-            }
-
-    .game-trailers {
-        margin-top: 20px;
-    }
-
-        .game-trailers video{
-            width: 100% !important;
-            height: 400px !important; /* Increase video size */
-            object-fit: cover !important;
-            border-radius: 10px;
-        }
-        
-        .game-trailers iframe {
-            width: 100%;
-            height: 400px; /* Increase video size */
-            border-radius: 10px;
-        }
-
-    /* View All Button */
-    .view-all-button {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-        cursor: pointer;
-        position: absolute; /* Changed from 'relative' to 'absolute' */
-        top: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.6); /* Semi-transparent */
-        font-weight: bold;
-        border-radius: 10px;
-        text-align: center;
-    }
-
-        .view-all-button:hover {
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-    /* Popup Modal */
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 1000;
-        overflow-y: auto;
-    }
-
-    .modal-content {
-        background: #fff;
-        margin: 5% auto;
-        padding: 20px;
-        border-radius: 10px;
-        max-width: 650px; /* Don't limit unnecessarily */
-        height: auto; /* Expand based on content */
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: visible; /* Ensure full expansion */
-    }
-
-        .modal-content img {
-            width: 100%; /* Fit within modal */
-            height: auto; /* Keep aspect ratio */
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.3s;
-            display: block;
-            margin: 5px auto; /* Space images out */
-        }
-
-            .modal-content img:hover {
-                transform: scale(1.05);
-            }
-
-    .modal .close-modal {
-        position: absolute;
-        top: -30px;
-        right: -30px;
-        font-size: 2em;
-        color: red;
-        cursor: pointer;
-        background: rgba(0, 0, 0, 0.8);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .close-modal {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 1.5em;
-        cursor: pointer;
-    }
-
-    /* Sidebar */
-    .game-sidebar {
-        margin-top: 30px;
-    }
-
-        .game-sidebar h3 {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .game-sidebar p {
-            font-size: 1em;
-            color: inherit;
-        }
-
-
-    /* Image Modal Styling */
-    #imageModal .modal-content {
-        max-width: 60%;
-        margin: 5% auto;
-        padding: 20px;
-        border-radius: 10px;
-        position: relative;
-    }
-
-    #imageModal img {
-        width: 100%;
-        height: auto;
-        border-radius: 10px;
-    }
-
-    #imageModal .close-modal {
-        position: absolute;
-        top: -30px;
-        right: -30px;
-        font-size: 2em;
-        color: red;
-        cursor: pointer;
-        background: rgba(0, 0, 0, 0.8);
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    #add-game {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-        cursor: pointer;
-        position: absolute; /* Changed from 'relative' to 'absolute' */
-        top: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(255, 255, 255, 0.6); /* Semi-transparent */
-        font-weight: bold;
-        border-radius: 10px;
-        text-align: center;
+        opacity: 0.3;
     }
 </style>
 
-<div class="game-header" style="background-image: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)');">
+<main>
+    <link rel="stylesheet" href="/css/gamepage.css">
+
+    <div class="game-header" style="background-image: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "https://localhost:44322/media/erek3if5/default-game-poster.jpg" : Model.Game.BackgroundImage)');">
     <div class="game-header-overlay"></div>
-    <div class="game-header-content">
-        @if (!string.IsNullOrEmpty(Model.Game.Website))
-        {
-            <h1 class="game-title"><a href="@Model.Game.Website" target="_blank">@Model.Game.Name</a></h1>
-        }
-        else
-        {
-            <h1 class="game-title">@Model.Game.Name</h1>
-        }
-        <p class="game-meta">
+        <div class="game-header-content">
+            @if (!string.IsNullOrEmpty(Model.Game.Website))
+            {
+                <h1 class="game-title"><a href="@Model.Game.Website" target="_blank">@Model.Game.Name</a></h1>
+            }
+            else
+            {
+                <h1 class="game-title">@Model.Game.Name</h1>
+            }
+            <p class="game-meta">
             @if (Model.Game.Released != null)
             {
                 <span>@Model.Game.Released</span>
@@ -335,76 +55,79 @@
             }
             @if (Model.Game.Playtime != null && Model.Game.Playtime > 0)
             {
-                <span> | Playtime: @Model.Game.Playtime hours</span>
+                    <span> | @umbracoHelper.GetDictionaryValue("Playtime", @CultureInfo.CurrentCulture): @Model.Game.Playtime hours</span>
             }
             @if (Model.Game.Rating != null && Model.Game.Rating > 0)
             {
-                <span> | Rating: @Model.Game.Rating</span>
+                    <span> | @umbracoHelper.GetDictionaryValue("Rating", @CultureInfo.CurrentCulture): @Model.Game.Rating</span>
             }
-        </p>
+            </p>
+        </div>
+
+@*         @using (Html.BeginUmbracoForm("AddGame", "GameSurface", FormMethod.Post)) *@
+        <form id="addGameForm">
+        <input type="hidden" name="Id" value="@Model.Game.Id" />
+        <input type="hidden" name="Name" value="@Model.Game.Name" />
+        <input type="hidden" name="Slug" value="@Model.Game.Slug" />
+        <input type="hidden" name="Metacritic" value="@Model.Game.Metacritic" />
+        <input type="hidden" name="Released" value="@Model.Game.Released" />
+        <input type="hidden" name="Rating" value="@Model.Game.Rating" />
+        <input type="hidden" name="Playtime" value="@Model.Game.Playtime" />
+        <button id="add-game" type="submit" class="btn btn-primary">@umbracoHelper.GetDictionaryValue("AddGameButton", @CultureInfo.CurrentCulture)</button>
+        </form>
+    
+        <!-- Green Popup -->
+        <div id="success-popup" class="success-popup">Added to list</div>
     </div>
 
-</div>
-
-@using (Html.BeginUmbracoForm("AddGame", "GameSurface", FormMethod.Post))
-{
-    <input type="hidden" name="Id" value="@Model.Game.Id" />
-    <input type="hidden" name="Name" value="@Model.Game.Name" />
-    <input type="hidden" name="Slug" value="@Model.Game.Slug" />
-    @*         <input type="hidden" name="Description" value="@item.Description" /> *@
-    <input type="hidden" name="Metacritic" value="@Model.Game.Metacritic" />
-    <input type="hidden" name="Released" value="@Model.Game.Released" />
-    @*         <input type="hidden" name="BackgroundImage" value="@item.BackgroundImage" /> *@
-    <input type="hidden" name="Rating" value="@Model.Game.Rating" />
-    <input type="hidden" name="Playtime" value="@Model.Game.Playtime" />
-    @*         <input type="hidden" name="Platforms" value="@string.Join(",", item.Platforms?.Select(p => p.PlatformDetails?.Name) ?? new List<string>())" />
-        <input type="hidden" name="Genres" value="@string.Join(",", item.Genres?.Select(g => g.Name) ?? new List<string>())" />
-        <input type="hidden" name="EsrbRating" value="@item.EsrbRating?.Name" /> *@
-    <button class="add-game" type="submit" class="btn btn-primary">Add Game to List</button>
-}
-<div class="container">
+    
+    <div class="container">
     <div class="row">
         
         <!-- Details Section -->
         <div class="col-md-4 order-2 order-md-1">
             <div class="game-details">
-                <h2>About the Game</h2>
-                <p class="game-description">@Model.Game.Description</p>
+                    <h2>@umbracoHelper.GetDictionaryValue("Aboutgame", @CultureInfo.CurrentCulture)</h2>
+                    <p class="game-description">
+                        @(string.IsNullOrWhiteSpace(Model.Game.Description)
+                            ? @umbracoHelper.GetDictionaryValue("Nodescription", @CultureInfo.CurrentCulture)
+                            : Model.Game.Description)
+                    </p>
             </div>
         </div>
 
         <!-- Info Section -->
         <div class="col-md-4 offset-md-1 order-1 order-md-2">
             <div class="game-info text-center">
-                <h3>Platforms</h3>
+                    <h3>@umbracoHelper.GetDictionaryValue("Platforms", @CultureInfo.CurrentCulture)</h3>
                 <p class="game-platforms">
                     @(Model.Game.Platforms?.Any() == true
-                        ? string.Join(", ", Model.Game.Platforms.Select(p => p.PlatformDetails?.Name ?? "Unknown"))
-                        : "No platforms available")
+                            ? string.Join(", ", Model.Game.Platforms.Select(p => p.PlatformDetails?.Name ?? @umbracoHelper.GetDictionaryValue("Unknown", @CultureInfo.CurrentCulture)))
+                            : @umbracoHelper.GetDictionaryValue("Noplatforms", @CultureInfo.CurrentCulture))
                 </p>
 
-                <h3>Genres</h3>
+                    <h3>@umbracoHelper.GetDictionaryValue("Genres", @CultureInfo.CurrentCulture)</h3>
                 <p class="game-genres">
                     @(Model.Game.Genres?.Any() == true
                         ? string.Join(", ", Model.Game.Genres.Select(g => g.Name))
-                        : "No genres available")
+                            : @umbracoHelper.GetDictionaryValue("Nogenres", @CultureInfo.CurrentCulture))
                 </p>
 
-                <h3>Developers</h3>
+                    <h3>@umbracoHelper.GetDictionaryValue("Developers", @CultureInfo.CurrentCulture)</h3>
                 <p class="game-developers">
                     @(Model.Game.Developers?.Any() == true
                         ? string.Join(", ", Model.Game.Developers.Select(d => d.Name))
-                        : "No developers available")
+                            : @umbracoHelper.GetDictionaryValue("Nodevelopers", @CultureInfo.CurrentCulture))
                 </p>
 
-                <h3>Publishers</h3>
+                    <h3>@umbracoHelper.GetDictionaryValue("Publishers", @CultureInfo.CurrentCulture)</h3>
                 <p class="game-publishers">
                     @(Model.Game.Publishers?.Any() == true
                         ? string.Join(", ", Model.Game.Publishers.Select(p => p.Name))
-                        : "No publishers available")
+                            : @umbracoHelper.GetDictionaryValue("Nopublishers", @CultureInfo.CurrentCulture))
                 </p>
 
-                <h3>Stores</h3>
+                    <h3>@umbracoHelper.GetDictionaryValue("Stores", @CultureInfo.CurrentCulture)</h3>
                 <ul class="game-stores">
                     @if (Model.Game.Stores?.Any() == true)
                     {
@@ -415,7 +138,7 @@
                     }
                     else
                     {
-                        <li>No stores available</li>
+                            <li>@umbracoHelper.GetDictionaryValue("Nostores", @CultureInfo.CurrentCulture)</li>
                     }
                 </ul>
             </div>
@@ -424,7 +147,7 @@
         <!-- Media Section -->
         <div class="col-md-3 order-3">
             <div class="game-media">
-                <h3>Trailers & Images</h3>
+                    <h3>@umbracoHelper.GetDictionaryValue("Trailersimages", @CultureInfo.CurrentCulture)</h3>
                 @if (Model.Game.Movies?.Any() == true)
                 {
                     foreach (var movie in Model.Game.Movies.Take(1))
@@ -443,19 +166,19 @@
                                 <!-- Use standard video tag -->
                                 <video width="560" height="315" controls class="w-200" autoplay loop>
                                     <source src="@videoUrl" type="video/mp4" />
-                                    Your browser does not support the video tag.
+                                        @umbracoHelper.GetDictionaryValue("Zvideotag", @CultureInfo.CurrentCulture)
                                 </video>
                             }
                         }
                         else
                         {
-                            <p>No valid trailer URL available for this movie.</p>
+                                <p>@umbracoHelper.GetDictionaryValue("Zurlgame", @CultureInfo.CurrentCulture)</p>
                         }
                     }
                 }
                 else
                 {
-                    <p>No trailers available for this game.</p>
+                        <p>@umbracoHelper.GetDictionaryValue("Ztrailersgame", @CultureInfo.CurrentCulture)</p>
                 }
                 <div class="game-screenshots">
                     @if (Model.Game.Screenshots?.Any() == true)
@@ -470,14 +193,14 @@
                                 <!-- Show "View All" only if there are 4 or more screenshots -->
                                 @if (screenshotsToShow.Count == 4 && Model.Game.Screenshots.Count > 4 && screenshot == screenshotsToShow.Last())
                                 {
-                                    <div class="view-all-button" onclick="openModal()">View All</div>
+                                        <div class="view-all-button" onclick="openModal()">@umbracoHelper.GetDictionaryValue("Viewall", @CultureInfo.CurrentCulture)</div>
                                 }
                             </div>
                         }
                     }
                     else
                     {
-                        <p>No screenshots available</p>
+                            <p>@umbracoHelper.GetDictionaryValue("Znoscreenshot", @CultureInfo.CurrentCulture)</p>
                     }
                 </div>
             </div>
@@ -518,13 +241,13 @@
                             <!-- Use standard video tag -->
                             <video controls class="w-100 mb-4">
                                 <source src="@videoUrl" type="video/mp4" />
-                                Your browser does not support the video tag.
+                                    @umbracoHelper.GetDictionaryValue("Zvideotag", @CultureInfo.CurrentCulture)
                             </video>
                         }
                     }
                     else
                     {
-                        <p>No valid trailer URL available for this movie.</p>
+                            <p>@umbracoHelper.GetDictionaryValue("Zurlgame", @CultureInfo.CurrentCulture)</p>
                     }
                 }
             }
@@ -589,6 +312,7 @@
 
 <!-- Reviews Will Be Displayed Here -->
 <div id="reviewsContainer"></div>
+</main>
 <script>
     document.getElementById("loadReviews").addEventListener("click", function () {
         var gameId = "@Model.Game.Id"; // Get Game ID from Razor
@@ -624,8 +348,46 @@
             .catch(error => console.error("Error loading reviews:", error));
     });
 </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("addGameForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
 
+        var formData = new FormData(this);
 
+        fetch("@Url.Action("AddGame", "GameSurface")", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Change button text and disable it
+                let addButton = document.getElementById("add-game");
+                addButton.innerText = "Added";
+                addButton.disabled = true;
+
+                // Show success popup
+                let popup = document.getElementById("success-popup");
+                popup.style.display = "block";
+                popup.style.opacity = "1";
+
+                // Hide popup after 4 seconds
+                setTimeout(() => {
+                    popup.style.opacity = "0";
+                    setTimeout(() => popup.style.display = "none", 500);
+                }, 4000);
+            } else {
+                alert(data.message); // Show error message
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+});
+</script>
 
 
 
