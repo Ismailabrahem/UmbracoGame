@@ -139,6 +139,7 @@ body {
 .search-box {
     margin: 20px auto;
     max-width: 600px;
+    width: 600px;
     display: flex;
     align-items: center;
 }
@@ -146,6 +147,7 @@ body {
 .search-input {
     width: 100%;
     padding: 10px;
+    align-items: center;
     border: 1px solid var(--bs-border-color); /* Use Bootstrap's border color variable */
     background: var(--bs-body-bg); /* Use Bootstrap's background color variable */
     color: var(--bs-body-color); /* Use Bootstrap's text color variable */
@@ -154,13 +156,12 @@ body {
 }
 
 .search-button {
-    padding: 15px 15px;
+    padding: 10.5px 10px;
     background: var(--bs-primary); /* Use Bootstrap's primary color variable */
     border: none;
     cursor: pointer;
     color: white;
     border-radius: 5px;
-    margin-left: 10px;
     transition: background-color 0.3s ease; /* Smooth hover effect */
 }
 

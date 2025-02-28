@@ -35,8 +35,6 @@ app.UseStatusCodePages(async context =>
         await Task.Yield();
     }
 });
-//app.UseExceptionHandler("/error"); // Redirect to your custom error page for unhandled exceptions
-//app.UseStatusCodePagesWithReExecute("/error"); // Redirect to your custom error page for status codes like 404
 app.MapBlazorHub();
 
 await app.BootUmbracoAsync();
@@ -52,11 +50,6 @@ app.UseUmbraco()
     {
         u.UseBackOfficeEndpoints();
         u.UseWebsiteEndpoints();
-
-        //u.EndpointRouteBuilder.MapControllerRoute(
-        //    name: "GameDetails",
-        //    pattern: "game",
-        //    defaults: new { controller = "Game", action = "Details" });
     });
 
 await app.RunAsync();

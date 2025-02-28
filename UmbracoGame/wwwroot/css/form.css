@@ -1,0 +1,50 @@
+﻿/* Define CSS variables for light and dark themes */
+:root {
+    --primary-color: #007bff; /* Blue for light theme */
+    --background-color: #ffffff; /* Light background */
+    --text-color: #000000; /* Dark text */
+    --input-background: #f8f9fa; /* Light input background */
+    --input-border: #ced4da; /* Light input border */
+}
+
+[data-theme="dark"] {
+    --primary-color: #1a73e8; /* Slightly darker blue for dark theme */
+    --background-color: #121212; /* Dark background */
+    --text-color: #ffffff; /* Light text */
+    --input-background: #2d2d2d; /* Dark input background */
+    --input-border: #444444; /* Dark input border */
+}
+
+
+
+/* Apply the styles */
+.btn.primary {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    font-size: 1em !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease !important;
+}
+
+    .btn.primary:hover {
+        background-color: #0056b3 !important; /* Darker shade for hover */
+    }
+
+label {
+    font-size: 1.2em !important;
+}
+
+input {
+    background-color: var(--input-background) !important;
+    color: var(--text-color) !important;
+    transition: border-color 0.3s ease, background-color 0.3s ease !important;
+}
+
+    input:focus {
+        border-color: var(--primary-color) !important;
+        outline: none !important;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5) !important;
+    }

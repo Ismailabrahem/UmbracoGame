@@ -41,10 +41,15 @@
                     };
 
                     _petaPocoService.AddReview(review);
+
+                    // Return a success response
+                    return Json(new { success = true, message = "Review added successfully!" });
                 }
 
-                return RedirectToCurrentUmbracoPage(); // Refresh the page
+                // Return an error response if validation fails
+                return Json(new { success = false, message = "Invalid input data." });
             }
+
 
             [HttpGet]
             public JsonResult GetReviews(string gameId)

@@ -1,21 +1,37 @@
 ﻿@using System.Globalization
+@using Umbraco.Cms.Core.Web
 @using Umbraco.Cms.Web.Common
 @using Umbraco.Cms.Web.Common.PublishedModels;
 @using UmbracoGame.Interfaces;
+@using UmbracoGame.Models.ViewModels
 @inject UmbracoHelper umbracoHelper
+@inject IUmbracoContextAccessor umbracoContextAccessor
 @{
     Layout = null;
+    var umbracoContext = umbracoContextAccessor.GetRequiredUmbracoContext();
+    var domainCache = umbracoContext.Domains.GetAll(includeWildcards: false);
+    var siteRoot = umbracoContext.Content.GetAtRoot().FirstOrDefault();
 
-    // var metaDescription = string.Empty;
-    // if (Model is IPageModel m)
-    // {
-    //     metaDescription = m.Content is ISeo seo && !seo.MetaDescription.IsNullOrWhiteSpace() ? seo.MetaDescription : Model.Name;
-    // }
+    var currentCulture = System.Globalization.CultureInfo.CurrentCulture.Name;
+    var currentDomain = domainCache.FirstOrDefault(d => d.Culture == currentCulture);
+
+    // Find the Settings page
+    var settingsPage = umbracoContext.Content.GetAtRoot().FirstOrDefault(n => n.ContentType.Alias == "start");
+
+    // Ensure settingsPage is not null and supports the current culture
+    IEnumerable<IPublishedContent> navbarItems = new List<IPublishedContent>(); // Default empty
+
+    if (settingsPage != null && settingsPage.Cultures.ContainsKey(currentCulture))
+    {
+        navbarItems = settingsPage.Value<IEnumerable<IPublishedContent>>("navbar", culture: currentCulture)
+                      ?? new List<IPublishedContent>(); // Avoid null reference
+    }
 }
 
 <!doctype html>
 <html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="auto">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Google Tag Manager -->
     <script>
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -28,7 +44,7 @@
     <script src="https://getbootstrap.com/docs/5.3/assets/js/color-modes.js"></script>
     <title>Spelsidan</title>
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
-@*     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@docsearch/css@3"> *@
+
 
     <link href="https://getbootstrap.com/docs/5.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
@@ -37,124 +53,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
-
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @@media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-
-        .b-example-divider {
-            width: 100%;
-            height: 3rem;
-            background-color: rgba(0, 0, 0, .1);
-            border: solid rgba(0, 0, 0, .15);
-            border-width: 1px 0;
-            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-        }
-
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
-        }
-
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
-
-        .nav-scroller {
-            position: relative;
-            z-index: 2;
-            height: 2.75rem;
-            overflow-y: hidden;
-        }
-
-            .nav-scroller .nav {
-                display: flex;
-                flex-wrap: nowrap;
-                padding-bottom: 1rem;
-                margin-top: -1px;
-                overflow-x: auto;
-                text-align: center;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-            }
-
-        .btn-bd-primary {
-            --bd-violet-bg: #712cf9;
-            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-            --bs-btn-font-weight: 600;
-            --bs-btn-color: var(--bs-white);
-            --bs-btn-bg: var(--bd-violet-bg);
-            --bs-btn-border-color: var(--bd-violet-bg);
-            --bs-btn-hover-color: var(--bs-white);
-            --bs-btn-hover-bg: #6528e0;
-            --bs-btn-hover-border-color: #6528e0;
-            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-            --bs-btn-active-color: var(--bs-btn-hover-color);
-            --bs-btn-active-bg: #5a23c8;
-            --bs-btn-active-border-color: #5a23c8;
-        }
-
-        .bd-mode-toggle {
-            z-index: 1500;
-        }
-
-            .bd-mode-toggle .dropdown-menu .active .bi {
-                display: block !important;
-            }
-
-        .carousel-poster {
-            width: 100%;
-            height: 100%;
-        }
-
-        .carousel {
-            margin-bottom: 0px !important;
-        }
-
-        .movie-card {
-            max-height: 300px;
-        }
-
-        @@media (max-width: 768px) {
-            .movie-card {
-                max-height: 100%;
-            }
-        }
-
-
-        #cookieSettingsBtn {
-            position: fixed;
-            bottom: 15px;
-            left: 15px;
-            background-color: #712cf9;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-        }
-
-        #cookieSettingsBtn:hover {
-            background: #6528e0;
-        }
-
-    </style>
+    <link href="~/css/form.css" rel="stylesheet" />
+    <link href="~/css/root.css" rel="stylesheet" />
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -223,21 +123,19 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
-@*                         <li class="nav-item" id="home">
-                            <a class="nav-link active" href="@Model.Content.Url()" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Home", @CultureInfo.CurrentCulture)</a>
-                        </li>
 
-                        <!-- Dynamic Search Link -->
-                        <li class="nav-item" id="searchNavBar">
-                            <a class="nav-link active" href="@Model.Content.Url()#search" onclick="sessionStorage.setItem('fromNavbar', 'true');">@umbracoHelper.GetDictionaryValue("Search", @CultureInfo.CurrentCulture)</a>
-                        </li>
-
-                        <li class="nav-item" id="aboutus">
-                            <a class="nav-link active" href="@Model.Content.Url()#aboutus" onclick="sessionStorage.setItem('fromNavbar', 'true')">@umbracoHelper.GetDictionaryValue("Aboutus", @CultureInfo.CurrentCulture)</a>
-                        </li>*@
-                    </ul> 
-
-                   
+                        @if (navbarItems != null && navbarItems.Any())
+                        {
+                            foreach (var item in navbarItems)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@item.Url(currentCulture)"
+                                       onclick="sessionStorage.setItem('fromNavbar', 'true');">@item.Name</a>
+                                </li>
+                            }
+                        }
+                        
+                   </ul>
                         @Html.Partial("LanguageSwitcher")
 
                     <!-- Dynamic Search Form -->

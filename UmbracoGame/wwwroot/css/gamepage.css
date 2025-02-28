@@ -12,7 +12,7 @@
 .game-header {
     position: relative;
     height: 400px;
-    background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "/media/y42flv5e/default-game-poster.jpg" : Model.Game.BackgroundImage)') no-repeat center center;
+    background: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "https://localhost:44322/media/erek3if5/default-game-poster.webp" : Model.Game.BackgroundImage)') no-repeat center center;
     background-size: cover;
     border-radius: 10px;
     overflow: hidden;
@@ -53,9 +53,11 @@
 }
 
 .game-details {
-    margin-top: 30px;
+    margin-top: 20px;
     text-align: center;
-    
+    margin-left: -330px;
+    margin-right: 150px;
+
 }
 
 .game-description {
@@ -64,17 +66,26 @@
     color: inherit;
     text-align: center;
 }
+.game-info {
+    margin-left: -215px; /* Move the entire section 100px to the left */
+}
+
 
 .game-info h3 {
     font-size: 1.5em;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-top: 20px;
 }
 
 .game-info p, .game-info ul {
     font-size: 1em;
     color: inherit;
     text-align: center;
+}
+
+.game-stores {
+    list-style-type: none; /* Remove the dot before store names */
+    padding-left: 0; /* Remove default padding */
 }
 
 .game-media {
@@ -88,10 +99,12 @@
         font-weight: bold;
         margin-bottom: 10px;
         text-align: center;
+        margin-right: -280px;
     }
 
     .game-media p {
         text-align: center;
+        margin-right: -280px;
     }
 
 
@@ -313,4 +326,186 @@
         top: 20px;
     }
     /* Slide down to 20px from the top */
+}
+
+.review-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons on top of each other */
+    gap: 10px; /* Space between buttons */
+    justify-content: center; /* Center them horizontally */
+    align-items: center; /* Align buttons to center */
+    width: 560px; /* Match the width of .game-screenshots */
+    margin-top: 10px; /* Add some margin to separate from screenshots */
+}
+
+.open-btn {
+    background: linear-gradient(45deg, #ff6b6b, #f06595);
+    border: none;
+    padding: 12px 20px;
+    color: white;
+    width: 100%; /* Stretch buttons to take full width */
+    max-width: 100%; /* Prevent overflow */
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center; /* Ensure text is centered */
+}
+
+    .open-btn:hover {
+        background: linear-gradient(45deg, #f06595, #d45087);
+        transform: scale(1.05);
+    }
+
+
+
+
+/* Popup Background */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Popup Content */
+.popup-content {
+    background: white;
+    padding: 30px;
+    width: 450px; /* Wider than the review form */
+    max-height: 500px;
+    overflow-y: auto; /* Allows scrolling for multiple reviews */
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    animation: popIn 0.3s ease-in-out forwards;
+}
+
+
+
+/* Title */
+.popup-content {
+    background: white;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 30px;
+    width: 450px;
+    max-height: 500px;
+    overflow-y: auto;
+    border-radius: 12px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    animation: popIn 0.3s ease-in-out forwards;
+}
+
+[data-bs-theme="dark"] .popup-content {
+    background: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+
+.popup-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+[data-bs-theme="dark"] .popup-title {
+    color: #ffffff;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: #888;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .close:hover {
+        color: #ff6b6b;
+    }
+
+[data-bs-theme="dark"] .close {
+    color: #aaa;
+}
+
+    [data-bs-theme="dark"] .close:hover {
+        color: #ff6b6b;
+    }
+
+.submit-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+[data-bs-theme="dark"] .submit-btn {
+    background: #1a73e8;
+}
+
+.submit-btn:hover {
+    opacity: 0.9;
+}
+
+.review-item {
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .review-item {
+    background: #1e1e1e;
+    color: #ffffff;
+}
+
+.review-item strong {
+    color: inherit;
+}
+
+.review-item em {
+    font-size: 12px;
+    color: inherit;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
 }

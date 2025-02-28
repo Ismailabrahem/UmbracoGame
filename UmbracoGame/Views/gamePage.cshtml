@@ -32,8 +32,8 @@
 
 <main>
     <link rel="stylesheet" href="/css/gamepage.css">
-
-    <div class="game-header" style="background-image: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "https://localhost:44322/media/erek3if5/default-game-poster.jpg" : Model.Game.BackgroundImage)');">
+    <meta name="viewport">
+    <div class="game-header" style="background-image: url('@(string.IsNullOrEmpty(Model.Game.BackgroundImage) ? "https://localhost:44322/media/erek3if5/default-game-poster.webp" : Model.Game.BackgroundImage)');">
     <div class="game-header-overlay"></div>
         <div class="game-header-content">
             @if (!string.IsNullOrEmpty(Model.Game.Website))
@@ -64,7 +64,6 @@
             </p>
         </div>
 
-@*         @using (Html.BeginUmbracoForm("AddGame", "GameSurface", FormMethod.Post)) *@
         <form id="addGameForm">
         <input type="hidden" name="Id" value="@Model.Game.Id" />
         <input type="hidden" name="Name" value="@Model.Game.Name" />
@@ -75,12 +74,8 @@
         <input type="hidden" name="Playtime" value="@Model.Game.Playtime" />
         <button id="add-game" type="submit" class="btn btn-primary">@umbracoHelper.GetDictionaryValue("AddGameButton", @CultureInfo.CurrentCulture)</button>
         </form>
-    
-        <!-- Green Popup -->
-        <div id="success-popup" class="success-popup">Added to list</div>
     </div>
 
-    
     <div class="container">
     <div class="row">
         
@@ -99,34 +94,44 @@
         <!-- Info Section -->
         <div class="col-md-4 offset-md-1 order-1 order-md-2">
             <div class="game-info text-center">
+                    <div class="row">
+                    <div class="col-md-6">
                     <h3>@umbracoHelper.GetDictionaryValue("Platforms", @CultureInfo.CurrentCulture)</h3>
-                <p class="game-platforms">
-                    @(Model.Game.Platforms?.Any() == true
+                        <p class="game-platforms">
+                            @(Model.Game.Platforms?.Any() == true
                             ? string.Join(", ", Model.Game.Platforms.Select(p => p.PlatformDetails?.Name ?? @umbracoHelper.GetDictionaryValue("Unknown", @CultureInfo.CurrentCulture)))
                             : @umbracoHelper.GetDictionaryValue("Noplatforms", @CultureInfo.CurrentCulture))
-                </p>
-
+                        </p>
+                    </div>
+                    <div class="col-md-6">
                     <h3>@umbracoHelper.GetDictionaryValue("Genres", @CultureInfo.CurrentCulture)</h3>
-                <p class="game-genres">
-                    @(Model.Game.Genres?.Any() == true
+                        <p class="game-genres">
+                            @(Model.Game.Genres?.Any() == true
                         ? string.Join(", ", Model.Game.Genres.Select(g => g.Name))
                             : @umbracoHelper.GetDictionaryValue("Nogenres", @CultureInfo.CurrentCulture))
-                </p>
-
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                     <h3>@umbracoHelper.GetDictionaryValue("Developers", @CultureInfo.CurrentCulture)</h3>
-                <p class="game-developers">
-                    @(Model.Game.Developers?.Any() == true
+                        <p class="game-developers">
+                            @(Model.Game.Developers?.Any() == true
                         ? string.Join(", ", Model.Game.Developers.Select(d => d.Name))
                             : @umbracoHelper.GetDictionaryValue("Nodevelopers", @CultureInfo.CurrentCulture))
-                </p>
-
+                        </p>
+                    </div>
+                    <div class="col-md-6">
                     <h3>@umbracoHelper.GetDictionaryValue("Publishers", @CultureInfo.CurrentCulture)</h3>
-                <p class="game-publishers">
-                    @(Model.Game.Publishers?.Any() == true
+                        <p class="game-publishers">
+                            @(Model.Game.Publishers?.Any() == true
                         ? string.Join(", ", Model.Game.Publishers.Select(p => p.Name))
                             : @umbracoHelper.GetDictionaryValue("Nopublishers", @CultureInfo.CurrentCulture))
-                </p>
-
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 text-center">
                     <h3>@umbracoHelper.GetDictionaryValue("Stores", @CultureInfo.CurrentCulture)</h3>
                 <ul class="game-stores">
                     @if (Model.Game.Stores?.Any() == true)
@@ -141,16 +146,151 @@
                             <li>@umbracoHelper.GetDictionaryValue("Nostores", @CultureInfo.CurrentCulture)</li>
                     }
                 </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Media Section -->
-        <div class="col-md-3 order-3">
-            <div class="game-media">
+            <div class="col-md-3 order-3">
+                <div class="game-media">
                     <h3>@umbracoHelper.GetDictionaryValue("Trailersimages", @CultureInfo.CurrentCulture)</h3>
+                    @if (Model.Game.Movies?.Any() == true)
+                    {
+                        foreach (var movie in Model.Game.Movies.Take(1))
+                        {
+                            var videoUrl = movie.Data?.HighQuality ?? movie.Preview;
+
+                            if (!string.IsNullOrEmpty(videoUrl))
+                            {
+                                if (videoUrl.Contains("youtube.com"))
+                                {
+                                    <!-- Embed YouTube video -->
+                                    <iframe width="560" height="315" src="https://www.youtube.com/embed/@videoUrl.Split('=')[1]?autoplay=1&loop=1&playlist=@videoUrl.Split('=')[1]" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                }
+                                else
+                                {
+                                    <!-- Use standard video tag -->
+                                    <video width="560" height="315" controls class="w-200" autoplay loop>
+                                        <source src="@videoUrl" type="video/mp4" />
+                                        @umbracoHelper.GetDictionaryValue("Zvideotag", @CultureInfo.CurrentCulture)
+                                    </video>
+                                }
+                            }
+                            else
+                            {
+                                <p>@umbracoHelper.GetDictionaryValue("Zurlgame", @CultureInfo.CurrentCulture)</p>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <p>@umbracoHelper.GetDictionaryValue("Ztrailersgame", @CultureInfo.CurrentCulture)</p>
+                    }
+                    <div class="game-screenshots">
+                        @if (Model.Game.Screenshots?.Any() == true)
+                        {
+                            var screenshotsToShow = Model.Game.Screenshots.Take(4).ToList(); // Take up to 4 screenshots
+
+                            foreach (var screenshot in screenshotsToShow)
+                            {
+                                <div style="position: relative;">
+                                    <img src="@screenshot.Image" alt="Screenshot" class="img-fluid" onclick="openImageModal('@screenshot.Image')" />
+
+                                    <!-- Show "View All" only if there are 4 or more screenshots -->
+                                    @if (screenshotsToShow.Count == 4 && Model.Game.Screenshots.Count > 4 && screenshot == screenshotsToShow.Last())
+                                    {
+                                        <div class="view-all-button" onclick="openModal()">@umbracoHelper.GetDictionaryValue("Viewall", @CultureInfo.CurrentCulture)</div>
+                                    }
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <p>@umbracoHelper.GetDictionaryValue("Znoscreenshot", @CultureInfo.CurrentCulture)</p>
+                        }
+                    </div>
+
+                </div>
+                <div class="review-buttons">
+                    <button onclick="openPopup()" class="open-btn">Write a Review</button>
+                </div>
+                <div class="review-buttons">
+                    <button onclick="openReviewsPopup()" class="open-btn">Load Reviews</button>
+                </div>
+
+                <!-- Popup Container -->
+                <div id="reviewPopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close" onclick="closePopup()">&times;</span>
+                        <h2 class="popup-title">Leave a Review</h2>
+
+                        <!-- Updated Form -->
+                        <form id="reviewForm">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="GameId" value="@Model.Game.Id" />
+
+                            <div class="form-group">
+                                <label class="label-name" for="Name">Your Name</label>
+                                <input type="text" name="Name" class="form-control" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Comment">Your Review</label>
+                                <textarea name="Comment" class="form-control" required></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="Rating">Rating</label>
+                                <select name="Rating" class="form-control" required>
+                                    <option value="1">1 - Poor</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="4">4 - Very Good</option>
+                                    <option value="5">5 - Excellent</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="submit-btn">Submit Review</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Reviews Popup -->
+                <div id="reviewsPopup" class="popup">
+                    <div class="popup-content">
+                        <span class="close" onclick="closeReviewsPopup()">&times;</span>
+
+                        <h2 class="popup-title">Game Reviews</h2>
+
+                        <!-- Reviews Will Be Displayed Here -->
+                        <div id="reviewsContainer">
+                            <p>Loading reviews...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Popup Modal -->
+    <div id="mediaModal" class="modal">
+        <div class="modal-content p-4">
+            <s pan class="close-modal" onclick="closeModal()">&times;</s>
+            <div class="media-items">
+                @if (Model.Game.Screenshots?.Any() == true)
+                {
+                    foreach (var screenshot in Model.Game.Screenshots)
+                    {
+                        <img src="@screenshot.Image" alt="Screenshot" class="img-fluid mb-4" onclick="openImageModal('@screenshot.Image')" />
+                    }
+                }
+
                 @if (Model.Game.Movies?.Any() == true)
                 {
-                    foreach (var movie in Model.Game.Movies.Take(1))
+                    foreach (var movie in Model.Game.Movies)
                     {
                         var videoUrl = movie.Data?.HighQuality ?? movie.Preview;
 
@@ -159,164 +299,44 @@
                             if (videoUrl.Contains("youtube.com"))
                             {
                                 <!-- Embed YouTube video -->
-                                <iframe width="560" height="315" src="https://www.youtube.com/embed/@videoUrl.Split('=')[1]?autoplay=1&loop=1&playlist=@videoUrl.Split('=')[1]" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                                <iframe width="600" height="355" src="https://www.youtube.com/embed/@videoUrl.Split('=')[1]" frameborder="0" allowfullscreen class="mb-4"></iframe>
                             }
                             else
                             {
                                 <!-- Use standard video tag -->
-                                <video width="560" height="315" controls class="w-200" autoplay loop>
+                                <video controls class="w-100 mb-4">
                                     <source src="@videoUrl" type="video/mp4" />
-                                        @umbracoHelper.GetDictionaryValue("Zvideotag", @CultureInfo.CurrentCulture)
+                                    @umbracoHelper.GetDictionaryValue("Zvideotag", @CultureInfo.CurrentCulture)
                                 </video>
                             }
                         }
                         else
                         {
-                                <p>@umbracoHelper.GetDictionaryValue("Zurlgame", @CultureInfo.CurrentCulture)</p>
-                        }
-                    }
-                }
-                else
-                {
-                        <p>@umbracoHelper.GetDictionaryValue("Ztrailersgame", @CultureInfo.CurrentCulture)</p>
-                }
-                <div class="game-screenshots">
-                    @if (Model.Game.Screenshots?.Any() == true)
-                    {
-                        var screenshotsToShow = Model.Game.Screenshots.Take(4).ToList(); // Take up to 4 screenshots
-
-                        foreach (var screenshot in screenshotsToShow)
-                        {
-                            <div style="position: relative;">
-                                <img src="@screenshot.Image" alt="Screenshot" class="img-fluid" onclick="openImageModal('@screenshot.Image')" />
-
-                                <!-- Show "View All" only if there are 4 or more screenshots -->
-                                @if (screenshotsToShow.Count == 4 && Model.Game.Screenshots.Count > 4 && screenshot == screenshotsToShow.Last())
-                                {
-                                        <div class="view-all-button" onclick="openModal()">@umbracoHelper.GetDictionaryValue("Viewall", @CultureInfo.CurrentCulture)</div>
-                                }
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                            <p>@umbracoHelper.GetDictionaryValue("Znoscreenshot", @CultureInfo.CurrentCulture)</p>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-
-<!-- Popup Modal -->
-<div id="mediaModal" class="modal">
-    <div class="modal-content p-4">
-        <span class="close-modal" onclick="closeModal()">&times;</span>
-        <div class="media-items">
-            @if (Model.Game.Screenshots?.Any() == true)
-            {
-                foreach (var screenshot in Model.Game.Screenshots)
-                {
-                    <img src="@screenshot.Image" alt="Screenshot" class="img-fluid mb-4" onclick="openImageModal('@screenshot.Image')" />
-                }
-            }
-
-            @if (Model.Game.Movies?.Any() == true)
-            {
-                foreach (var movie in Model.Game.Movies)
-                {
-                    var videoUrl = movie.Data?.HighQuality ?? movie.Preview;
-
-                    if (!string.IsNullOrEmpty(videoUrl))
-                    {
-                        if (videoUrl.Contains("youtube.com"))
-                        {
-                            <!-- Embed YouTube video -->
-                            <iframe width="600" height="355" src="https://www.youtube.com/embed/@videoUrl.Split('=')[1]" frameborder="0" allowfullscreen class="mb-4"></iframe>
-                        }
-                        else
-                        {
-                            <!-- Use standard video tag -->
-                            <video controls class="w-100 mb-4">
-                                <source src="@videoUrl" type="video/mp4" />
-                                    @umbracoHelper.GetDictionaryValue("Zvideotag", @CultureInfo.CurrentCulture)
-                            </video>
-                        }
-                    }
-                    else
-                    {
                             <p>@umbracoHelper.GetDictionaryValue("Zurlgame", @CultureInfo.CurrentCulture)</p>
+                        }
                     }
                 }
-            }
+            </div>
+
+        </div>
+
+
+    </div>
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeImageModal()">&times;</span>
+            <img id="enlargedImage" src="" alt="Enlarged Screenshot" class="img-fluid" />
         </div>
     </div>
 
-</div>
-<!-- Image Modal -->
-<div id="imageModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeImageModal()">&times;</span>
-        <img id="enlargedImage" src="" alt="Enlarged Screenshot" class="img-fluid" />
-    </div>
-</div>
-
-@using (Html.BeginUmbracoForm("AddReview", "ReviewSurface", FormMethod.Post, new { id = "reviewForm" }))
-{
-    <input type="hidden" name="GameId" value="@Model.Game.Id" />
-
-    <div class="form-group">
-        <label for="Name">Your Name</label>
-        <input type="text" name="Name" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Comment">Your Review</label>
-        <textarea name="Comment" class="form-control" required></textarea>
-    </div>
-
-    <div class="form-group">
-        <label for="Rating">Rating</label>
-        <select name="Rating" class="form-control" required>
-            <option value="1">1 - Poor</option>
-            <option value="2">2 - Fair</option>
-            <option value="3">3 - Good</option>
-            <option value="4">4 - Very Good</option>
-            <option value="5">5 - Excellent</option>
-        </select>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit Review</button>
-}
-
-@* <script>
-    document.getElementById("reviewForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        var formData = new FormData(this);
-
-        fetch(this.action, {
-            method: "POST",
-            body: formData
-        }).then(() => {
-            document.getElementById("reviewForm").reset(); // Clear form
-            document.getElementById("loadReviews").click(); // Refresh reviews
-        }).catch(error => console.error("Error submitting review:", error));
-    });
-</script> *@
-
-<!-- Button to Load Reviews -->
-<button id="loadReviews" class="btn btn-primary">Load Reviews</button>
-
-<!-- Reviews Will Be Displayed Here -->
-<div id="reviewsContainer"></div>
 </main>
-<script>
-    document.getElementById("loadReviews").addEventListener("click", function () {
-        var gameId = "@Model.Game.Id"; // Get Game ID from Razor
 
+<script>
+    function openReviewsPopup() {
+        document.getElementById("reviewsPopup").style.display = "flex";
+
+        var gameId = "@Model.Game.Id"; // Get Game ID from Razor
         console.log("Fetching reviews for GameId:", gameId);
 
         fetch(`/umbraco/surface/ReviewSurface/GetReviews?gameId=${gameId}`)
@@ -346,9 +366,12 @@
                 });
             })
             .catch(error => console.error("Error loading reviews:", error));
-    });
-</script>
-<script>
+    }
+
+    function closeReviewsPopup() {
+        document.getElementById("reviewsPopup").style.display = "none";
+    }
+
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("addGameForm").addEventListener("submit", function (event) {
         event.preventDefault(); // Prevent default form submission
@@ -387,11 +410,6 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Error:", error));
     });
 });
-</script>
-
-
-
-<script>
 
     function openModal() {
         document.getElementById('mediaModal').style.display = 'block';
@@ -409,8 +427,54 @@ document.addEventListener("DOMContentLoaded", function () {
     function closeImageModal() {
         document.getElementById('imageModal').style.display = 'none';
     }
-</script>
 
+        function openPopup() {
+        document.getElementById("reviewPopup").style.display = "flex";
+    }
+
+    function closePopup() {
+        document.getElementById("reviewPopup").style.display = "none";
+    }
+</script>
+<!-- JavaScript for AJAX Submission -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Handle review form submission
+        document.getElementById("reviewForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Serialize form data
+            const formData = new FormData(this);
+
+            // Send AJAX request
+            fetch("@Url.Action("AddReview", "ReviewSurface")", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert("Review submitted successfully!");
+
+                    // Optionally, reload the reviews section
+                    openReviewsPopup(); // Reload reviews in the popup
+                    closePopup(); // Close the review form popup
+                } else {
+                    // Show error message
+                    alert(data.message || "Failed to submit review.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while submitting the review.");
+            });
+        });
+    });
+</script>
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>

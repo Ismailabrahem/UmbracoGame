@@ -1,125 +1,188 @@
 ﻿body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #111;
-    color: #fff;
+    font-family: 'Helvetica Neue', sans-serif;
+    color: var(--text-color);
+    background: url(https://localhost:44322/media/izhn4f0h/background.webp) no-repeat center center fixed; /* Add background image */
+    background-size: cover;
 }
 
-header {
-    text-align: center;
-    padding: 100px 20px;
-    background: #222;
-    background-image: url("img/blyellow.avif"); /* Replace with your actual image path */
-    background-size: cover; /* Ensures the image covers the entire header */
-    background-position: center; /* Centers the image */
-    background-attachment: fixed;
-    background-repeat: no-repeat; /* Prevents the image from repeating */
+main {
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+h1, h2, h3, h4, p {
+    margin: 0 0 20px 0;
     color: white;
 }
 
-
-h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.5em;
-    margin-bottom: 10px;
+a {
+    color: var(--link-color);
+    text-decoration: none;
 }
 
-p {
-    font-size: 1.2em;
+    a:hover {
+        text-decoration: underline;
+    }
+
+/* Header */
+/* Header with Blurry Gaming Image Background */
+header {
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    color: white;
+    background: rgba(0, 0, 0, 0.3); /* Lighter opacity */
+    width: 100vw; /* Ensure it covers the full viewport width */
+    margin-left: -20px; /* Remove left margin space */
+    margin-right: -20px; /* Remove right margin space */
+}
+
+    header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: inherit;
+        filter: blur(16px); /* Increased blur */
+        z-index: -1;
+    }
+
+    header h1 {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    header p {
+        font-size: 1.5rem;
+        color: #e0e0e0;
+    }
+
+.scroll-down-arrow {
+    font-size: 2.5rem;
+    margin-top: 30px;
+}
+
+/* Section Styling */
+section {
+    padding: 30px 0;
+    align-content: center;
+    background-size: 80%;
 }
 
 .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
+    max-width: contain;
+    margin: 10px auto;
+    padding: 0 20px;
 }
 
 h2 {
-    font-size: 2em;
-    color: #ffcc00;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
+/* Team Members with Enhanced Hover Effect */
 .team-members {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 kolumner på första raden */
-    gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    max-width: 1000px; /* Sätter en maxbredd så att det inte blir för stort */
-    margin: auto;
 }
 
 .team-member {
-    background: #222;
-    padding: 20px;
-    border-radius: 10px;
+    flex: 1 1 28%;
+    padding: 25px;
+    box-sizing: border-box;
     text-align: center;
-    width: 200px; /* Fixad bredd */
-    height: 120px; /* Fixad höjd */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-
-
-
-.testimonials {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.testimonial {
-    background: #333;
-    padding: 15px;
+    border: 1px solid var(--border-color);
     border-radius: 10px;
-    max-width: 600px;
+    margin: 10px;
+    background-color: #3e424b;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-    .testimonial p {
-        font-style: italic;
+    .team-member h3 {
+        font-size: 1.75rem;
+        margin-bottom: 15px;
+        color: #fffada;
     }
 
-    .testimonial h4 {
-        margin-top: 10px;
-        color: #ffcc00;
+    .team-member p {
+        font-size: 1.125rem;
+        color: var(--secondary-text-color);
+        color: #fffada;
     }
 
+    .team-member:hover {
+        transform: translateY(-15px);
+        box-shadow: 0 15px 30px rgb(255, 216, 0);
+    }
+
+/* Section with Lighter Black Background */
+#about, #mission, #contact {
+    background: rgba(0, 0, 0, 0.3); /* Lighter opacity */
+    width: 100vw; /* Ensure it covers the full viewport width */
+    margin-left: -20px; /* Remove left margin space */
+    margin-right: -20px; /* Remove right margin space */
+    position: relative; /* Ensure the blur effect applies */
+}
+
+    #about::before, #mission::before, #contact::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: inherit;
+        filter: blur(16px); 
+        z-index: -1;
+    }
+
+    #about .container, #mission .container, #contact .container {
+        padding: 20px;
+        border-radius: 10px;
+        backdrop-filter: blur(8px);
+    }
+
+/* Contact Section */
 #contact {
-    background: #222;
-    padding: 40px 20px;
+    padding: 60px 0;
+    text-align: center;
 }
 
-.social-icons {
-    margin-top: 20px;
-}
-
-    .social-icons a img {
-        width: 40px;
-        margin: 0 10px;
+    #contact h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
     }
 
-#cta {
-    background: #ffcc00;
-    color: #111;
-    padding: 40px 20px;
-}
-
-    #cta .btn {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 1.2em;
-        background: #111;
-        color: #ffcc00;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-top: 10px;
+    #contact p {
+        font-size: 1.125rem;
+        margin-bottom: 15px;
     }
 
-        #cta .btn:hover {
-            background: #222;
+    #contact a {
+        color: var(--link-color);
+    }
+
+        #contact a:hover {
+            text-decoration: underline;
         }
+
+.social-icons a {
+    margin: 0 10px;
+    display: inline-block;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .social-icons a:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+/* Adjust the container for better layout */
+#contact .container {
+    max-width: 800px;

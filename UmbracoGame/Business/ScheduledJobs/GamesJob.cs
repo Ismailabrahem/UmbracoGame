@@ -13,14 +13,17 @@ namespace UmbracoGame.Business.ScheduledJobs
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IContentService _contentService;
         private readonly IScopeProvider _scopeProvider;
+        private readonly ILocalizationService _localizationService;
 
         public GamesJob(
             IUmbracoContextFactory umbracoContextFactory,
             IContentService contentService,
+            ILocalizationService localizationService,
             IScopeProvider scopeProvider)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _contentService = contentService;
+            _localizationService = localizationService;
             _scopeProvider = scopeProvider;
         }
 
@@ -55,36 +58,45 @@ namespace UmbracoGame.Business.ScheduledJobs
 
                     context.WriteLine($"GamesContainer found: {gamesContainer.Name} (ID: {gamesContainer.Id})");
 
-                    // Get all child nodes (games) under the GamesContainer
-                    var games = gamesContainer.Children<Game>("en-US").ToList();
-                    if (games == null || !games.Any())
+                    // Get all available languages in Umbraco
+                    var allLanguages = _localizationService.GetAllLanguages().Select(l => l.IsoCode).ToList();
+
+                    foreach (var language in allLanguages)
                     {
-                        context.WriteLine("No games found in the GamesContainer.");
-                        return;
-                    }
+                        context.WriteLine($"Processing language: {language}");
 
-                    context.WriteLine($"Number of games found: {games.Count}");
+                        var games = gamesContainer.Children<Game>(language).ToList();
 
-                    // Iterate through the games and process them
-                    foreach (var game in games)
-                    {
-                        context.WriteLine($"Processing game: {game.Name} (ID: {game.Id})");
-
-                        // Get the IContent object for the game
-                        var gameContent = _contentService.GetById(game.Id);
-                        if (gameContent != null)
+                        if (!games.Any())
                         {
-                            // Remove the game from Umbraco
-                            _contentService.Delete(gameContent);
-                            context.WriteLine($"Game {game.Name} removed successfully.");
+                            context.WriteLine($"No games found for language: {language}");
+                            continue;
                         }
-                        else
-                        {
-                            context.WriteLine($"Game {game.Name} not found in the content service.");
-                        }
-                    }
 
-                    context.WriteLine("All games processed successfully.");
+                        context.WriteLine($"Number of games found in {language}: {games.Count}");
+
+
+                        // Iterate through the games and process them
+                        foreach (var game in games)
+                        {
+                            context.WriteLine($"Processing game: {game.Name} (ID: {game.Id})");
+
+                            // Get the IContent object for the game
+                            var gameContent = _contentService.GetById(game.Id);
+                            if (gameContent != null)
+                            {
+                                // Remove the game from Umbraco
+                                _contentService.Delete(gameContent);
+                                context.WriteLine($"Game {game.Name} removed successfully.");
+                            }
+                            else
+                            {
+                                context.WriteLine($"Game {game.Name} not found in the content service.");
+                            }
+                        }
+
+                        context.WriteLine("All games processed successfully.");
+                    }
                 }
             }
             catch (Exception ex)

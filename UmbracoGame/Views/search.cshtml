@@ -9,28 +9,9 @@
 @{
     Layout = "root.cshtml";
 }
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="~/css/search.css" rel="stylesheet" />
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var searchButton = document.getElementById('searchButton');
-
-        // Check if the page is refreshed
-        var isRefreshed = performance.navigation.type === 1 ||
-                          performance.getEntriesByType("navigation")[0].type === "reload";
-
-        // Check if navigated from the navbar
-        var fromNavbar = sessionStorage.getItem('fromNavbar');
-
-        if (searchButton && (isRefreshed || fromNavbar === 'true')) {
-            searchButton.click(); // Auto-click the search button
-        }
-
-        // Clear the flag after pressing the button
-        sessionStorage.removeItem('fromNavbar');
-    });
-</script>
-
+<script src="~/js/search.js"></script>
 
 <div class="container">
     <!-- Search Form -->
@@ -38,10 +19,10 @@
         <div class="col-md-12">
             @using (Html.BeginUmbracoForm("SearchGame", "SearchSurface", FormMethod.Post, new { @class = "d-flex", @id = "searchForm" }))
             {
-                <div class="input-group search-box">
-                    <input class="form-control search-input" id="searchQuery" name="query" type="search" placeholder="@umbracoHelper.GetDictionaryValue("SearchPlaceholder", @CultureInfo.CurrentCulture)" aria-label="Search">
-                    <button id="searchButton" class="input-group-text search-button" type="submit">
-                        <i class="fas fa-search"></i>
+                <div class="search-box">
+                    <input class="search-input" id="searchQuery" name="query" type="search" placeholder="@umbracoHelper.GetDictionaryValue("SearchPlaceholder", @CultureInfo.CurrentCulture)" aria-label="Search">
+                    <button class="search-button" type="submit">
+                        🔍
                     </button>
                 </div>
             }
