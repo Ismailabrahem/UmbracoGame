@@ -213,17 +213,17 @@
 
                 </div>
                 <div class="review-buttons">
-                    <button onclick="openPopup()" class="open-btn">Write a Review</button>
+                    <button onclick="openPopup()" class="open-btn">@umbracoHelper.GetDictionaryValue("Reviewadd", @CultureInfo.CurrentCulture)</button>
                 </div>
                 <div class="review-buttons">
-                    <button onclick="openReviewsPopup()" class="open-btn">Load Reviews</button>
+                    <button onclick="openReviewsPopup()" class="open-btn">@umbracoHelper.GetDictionaryValue("Reviewload", @CultureInfo.CurrentCulture)</button>
                 </div>
 
                 <!-- Popup Container -->
                 <div id="reviewPopup" class="popup">
                     <div class="popup-content">
                         <span class="close" onclick="closePopup()">&times;</span>
-                        <h2 class="popup-title">Leave a Review</h2>
+                        <h2 class="popup-title">@umbracoHelper.GetDictionaryValue("Reviewsubmit", @CultureInfo.CurrentCulture)</h2>
 
                         <!-- Updated Form -->
                         <form id="reviewForm">
@@ -231,27 +231,27 @@
                             <input type="hidden" name="GameId" value="@Model.Game.Id" />
 
                             <div class="form-group">
-                                <label class="label-name" for="Name">Your Name</label>
+                                <label class="label-name" for="Name">@umbracoHelper.GetDictionaryValue("Reviewname", @CultureInfo.CurrentCulture)</label>
                                 <input type="text" name="Name" class="form-control" required />
                             </div>
 
                             <div class="form-group">
-                                <label for="Comment">Your Review</label>
+                                <label for="Comment">@umbracoHelper.GetDictionaryValue("Reviewdes", @CultureInfo.CurrentCulture)</label>
                                 <textarea name="Comment" class="form-control" required></textarea>
                             </div>
 
                             <div class="form-group">
-                                <label for="Rating">Rating</label>
+                                <label for="Rating">@umbracoHelper.GetDictionaryValue("Reviewrating", @CultureInfo.CurrentCulture)</label>
                                 <select name="Rating" class="form-control" required>
-                                    <option value="1">1 - Poor</option>
-                                    <option value="2">2 - Fair</option>
-                                    <option value="3">3 - Good</option>
-                                    <option value="4">4 - Very Good</option>
-                                    <option value="5">5 - Excellent</option>
+                                    <option value="1">1 - @umbracoHelper.GetDictionaryValue("Poor", @CultureInfo.CurrentCulture)</option>
+                                    <option value="2">2 - @umbracoHelper.GetDictionaryValue("Fair", @CultureInfo.CurrentCulture)</option>
+                                    <option value="3">3 - @umbracoHelper.GetDictionaryValue("Good", @CultureInfo.CurrentCulture)</option>
+                                    <option value="4">4 - @umbracoHelper.GetDictionaryValue("Verygood", @CultureInfo.CurrentCulture)</option>
+                                    <option value="5">5 - @umbracoHelper.GetDictionaryValue("Excellent", @CultureInfo.CurrentCulture)</option>
                                 </select>
                             </div>
 
-                            <button type="submit" class="submit-btn">Submit Review</button>
+                            <button type="submit" class="submit-btn">@umbracoHelper.GetDictionaryValue("Reviewsend", @CultureInfo.CurrentCulture)</button>
                         </form>
                     </div>
                 </div>
@@ -260,11 +260,11 @@
                     <div class="popup-content">
                         <span class="close" onclick="closeReviewsPopup()">&times;</span>
 
-                        <h2 class="popup-title">Game Reviews</h2>
+                        <h2 class="popup-title">@umbracoHelper.GetDictionaryValue("Reviewsgame", @CultureInfo.CurrentCulture)</h2>
 
                         <!-- Reviews Will Be Displayed Here -->
                         <div id="reviewsContainer">
-                            <p>Loading reviews...</p>
+                            <p>@umbracoHelper.GetDictionaryValue("Reviewloading", @CultureInfo.CurrentCulture)</p>
                         </div>
                     </div>
                 </div>
@@ -347,7 +347,7 @@
                 reviewsContainer.innerHTML = "";
 
                 if (!data || data.length === 0) {
-                    reviewsContainer.innerHTML = "<p>No reviews yet. Be the first to write one!</p>";
+                        reviewsContainer.innerHTML = "<p>@umbracoHelper.GetDictionaryValue("Reviewno", @CultureInfo.CurrentCulture)</p>";
                     return;
                 }
 
@@ -390,7 +390,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (data.success) {
                 // Change button text and disable it
                 let addButton = document.getElementById("add-game");
-                addButton.innerText = "Added";
+                    addButton.innerText = "@umbracoHelper.GetDictionaryValue("Added", @CultureInfo.CurrentCulture)";
                 addButton.disabled = true;
 
                 // Show success popup
